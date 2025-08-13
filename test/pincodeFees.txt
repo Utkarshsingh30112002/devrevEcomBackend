@@ -1,0 +1,51 @@
+Pincode City	Region/Area	Standard Delivery (days)	Fast Shipment (days)	Additional Cost (INR)
+560001	Bangalore	Central	1-2	Same Day-1	500
+560002	Bangalore	North	1-2	Same Day-1	500
+560003	Bangalore	South	1-2	Same Day-1	500
+560010	Bangalore	East	1-2	Same Day-1	500
+560017	Bangalore	West	1-2	Same Day-1	500
+500001	Hyderabad	Central	2-4	1-2	800
+500002	Hyderabad	Secunderabad	2-4	1-2	800
+500003	Hyderabad	Jubilee Hills	2-4	1-2	800
+500004	Hyderabad	Banjara Hills	2-4	1-2	800
+500005	Hyderabad	Abids	2-4	1-2	800
+600001	Chennai	Central	2-3	1-2	800
+600002	Chennai	Mylapore	2-3	1-2	800
+600003	Chennai	T. Nagar	2-3	1-2	800
+600004	Chennai	Adyar	2-3	1-2	800
+600005	Chennai	Velachery	2-3	1-2	800
+400001	Mumbai	South Mumbai	3-5	2-3	1500
+400002	Mumbai	Andheri	3-5	2-3	1500
+400003	Mumbai	Bandra	3-5	2-3	1500
+400004	Mumbai	Juhu	3-5	2-3	1500
+400005	Mumbai	Powai	3-5	2-3	1500
+411001	Pune	Shivajinagar	2-4	1-2	1200
+411002	Pune	Kothrud	2-4	1-2	1200
+411003	Pune	Viman Nagar	2-4	1-2	1200
+411004	Pune	Hinjewadi	2-4	1-2	1200
+411005	Pune	Baner	2-4	1-2	1200
+682001	Kochi	Fort Kochi	3-5	2-3	1000
+682002	Kochi	Ernakulam	3-5	2-3	1000
+682003	Kochi	Kakkanad	3-5	2-3	1000
+682004	Kochi	Vyttila	3-5	2-3	1000
+682005	Kochi	Thrikkakara	3-5	2-3	1000
+530001	Vishakapatnam	Gajuwaka	3-5	2-3	1300
+530002	Vishakapatnam	Visakhapatnam Port	3-5	2-3	1300
+530003	Vishakapatnam	Dwaraka Nagar	3-5	2-3	1300
+530004	Vishakapatnam	Maddilapalem	3-5	2-3	1300
+530005	Vishakapatnam	Seethammadhara	3-5	2-3	1300
+695001	Thiruvananthapuram	Statue	3-5	2-3	1000
+695002	Thiruvananthapuram	Kazhakkoottam	3-5	2-3	1000
+695003	Thiruvananthapuram	Neyyattinkara	3-5	2-3	1000
+695004	Thiruvananthapuram	Chalai	3-5	2-3	1000
+695005	Thiruvananthapuram	Palayam	3-5	2-3	1000
+636001	Salem	Ammapet	2-4	1-2	600
+636002	Salem	Suramangalam	2-4	1-2	600
+636003	Salem	Jagir Ammapalayam	2-4	1-2	600
+636004	Salem	Hasthampatti	2-4	1-2	600
+636005	Salem	Gugai	2-4	1-2	600
+440001	Nagpur	Sitabuldi	3-5	2-3	1000
+440002	Nagpur	Dharampeth	3-5	2-3	1000
+440003	Nagpur	Sadar	3-5	2-3	1000
+440004	Nagpur	Civil Lines	3-5	2-3	1000
+440005	Nagpur	Gokulpeth	3-5	2-3	1000

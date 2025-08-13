@@ -1,0 +1,234 @@
+Logitech MX200 - FAQs
+1. What is the DPI sensitivity range for the Logitech MX200?
+  - The Logitech MX200 has a DPI range of up to 1600, allowing for precise tracking across various surfaces.
+2. Is the Logitech MX200 suitable for both left-handed and right-handed users?
+  - The MX200 is ergonomically designed specifically for right-handed users, providing comfortable use during extended sessions.
+3. How does the Logitech MX200 connect to devices?
+  - It connects through a 2.4 GHz wireless technology with a unifying receiver, which supports multiple Logitech devices.
+4. What is the battery life of the Logitech MX200, and what type of battery does it use?
+  - The MX200 uses a standard AA battery and offers an impressive battery life of up to 12 months.
+5. Can I customize the buttons on the Logitech MX200?
+  - Yes, the Logitech Options software allows you to customize the five programmable buttons, tailoring them to your workflow.
+6. What operating systems is the Logitech MX200 compatible with?
+  - It is compatible with both Windows and macOS, making it a versatile option for users of different systems.
+7. Does the Logitech MX200 support fast scrolling?
+  - Yes, it features a hyper-fast scrolling wheel, which is perfect for quickly navigating through long documents and web pages.
+8. What is the weight of the Logitech MX200, and how does it affect usability?
+  - Weighing just 100g, the MX200 is lightweight, allowing for easy navigation and control without causing wrist strain.
+9. Is the Logitech MX200 suitable for gaming?
+  - While it is primarily designed for professional and personal use, the MX200 can handle lightweight gaming thanks to its precision optics and smooth tracking.
+10. What are the energy-saving features of the Logitech MX200?
+  - It includes an integrated power switch and smart sleep mode to conserve energy when not in use, ensuring the mouse is ready whenever needed.
+  
+HP Z3700 – FAQs
+1. What is the DPI setting of the HP Z3700?
+  - The HP Z3700 features a 1200 DPI optical sensor for smooth and precise tracking.
+2. Is the HP Z3700 compatible with both left and right-handed users?
+  - Yes, its symmetrical design accommodates both left and right-handed users comfortably.
+3. How do I connect the HP Z3700 to my computer?
+  - It connects using a USB nano receiver via a 2.4 GHz wireless connection for plug-and-play convenience.
+4. What is the battery life of the HP Z3700?
+  - The mouse offers up to 16 months of battery life using a single AA battery.
+5. Can I use the HP Z3700 on all surfaces?
+  - It tracks well on most surfaces; however, for highly reflective or glass surfaces, a mouse pad is recommended.
+6. Is any software required for the HP Z3700 setup?
+  - No additional software is required. Simply plug in the USB receiver and start using the mouse.
+7. What operating systems are compatible with the HP Z3700?
+  - It’s compatible with Windows, macOS, and some Linux distributions.
+8. Does it come in multiple colors?
+  - Yes, the HP Z3700 is available in a variety of colors to match your personal style.
+9. What makes the HP Z3700 suitable for office use?
+  - Its quiet operation, precision tracking, and long battery life make it ideal for office environments.
+10. Is the HP Z3700 suitable for travel?
+  - Yes, its compact size and long-lasting battery make it a great travel companion.
+
+Razer Basilisk X – FAQs
+1. What is the DPI range of the Razer Basilisk X?
+  - It features a 16,000 DPI optical sensor, adjustable via Razer Synapse software.
+2. What are the connectivity options available?
+  - The Basilisk X supports both Razer HyperSpeed Wireless and Bluetooth connectivity.
+3. How long does the battery last on a single AA battery?
+  - Up to 450 hours in Bluetooth mode and around 285 hours with HyperSpeed Wireless.
+4. Can all buttons on the Basilisk X be customized?
+  - Yes, all 6 buttons can be fully customized via Razer Synapse software.
+5. What makes the Razer Basilisk X ergonomic?
+  - Its right-handed ergonomic design and strategically placed buttons ensure comfort and accessibility.
+6. Is the Basilisk X suitable for non-gaming use?
+  - Yes, it switches between high-performance gaming and efficient non-gaming use seamlessly.
+7. Is the Razer Basilisk X compatible with macOS?
+  - Yes, it is compatible with macOS, though some customization features are best accessed via Windows.
+8. What makes HyperSpeed Wireless faster than standard Bluetooth?
+  - It features low latency and smooth frequency switching for minimal interference and lag.
+9. Does the Basilisk X have RGB lighting?
+  - No, this model focuses on performance and battery efficiency without RGB lighting.
+10. Is Razer Synapse software necessary for the Basilisk X?
+  - For button customization and DPI settings, Razer Synapse offers valuable features, but the mouse can function without it.
+
+Dell WM126 – FAQs
+1. What is the DPI setting of the Dell WM126?
+  - The mouse operates with a 1000 DPI optical sensor.
+2. How do I set up the Dell WM126?
+  - Setup is easy with plug-and-play functionality; insert the USB receiver and start using the mouse.
+3. Does the Dell WM126 support left-handed users?
+  - Yes, its ambidextrous design supports both left and right-handed users.
+4. What is the battery life for the Dell WM126?
+  - The mouse offers up to 12 months of battery life with one AA battery.
+5. What type of wireless technology does the WM126 use?
+  - It uses a 2.4 GHz wireless connection for reliable signal strength.
+6. Can the Dell WM126 be used on all surfaces?
+  - While it works on most, using a mouse pad on glass or reflective surfaces is recommended.
+7. Which operating systems are compatible with the WM126?
+  - It’s compatible with Windows, macOS, and various Linux distributions.
+8. Does the WM126 come with color options?
+  - Yes, it is available in multiple colors to suit your preference.
+9. What makes the Dell WM126 ideal for office use?
+  - Its precision tracking, quiet operation, and durable build make it suited for office environments.
+10. Is the WM126 mouse easy to transport?
+  - Yes, its compact size makes it ideal for portability between home and office.
+
+Microsoft BT5600 – FAQs
+1. How does the Microsoft BT5600 connect to devices?
+  - The mouse connects via Bluetooth, eliminating the need for a USB receiver.
+2. What is the tracking DPI for the BT5600?
+  - It features a 1000 DPI sensor for smooth and accurate tracking.
+3. Is the BT5600 suitable for right and left-handed users?
+  - Yes, its design is comfortable for both left and right-handed users.
+4. How long does the BT5600’s battery last?
+  - Up to 6 months on a single AA battery, depending on usage.
+5. What makes the BT5600 portable?
+  - Its compact design makes it easy to carry in bags or laptop cases.
+6. Which operating systems are compatible with the BT5600?
+  - It works with Windows, macOS, and Android platforms.
+7. Is Bluetooth setup with the BT5600 complicated?
+  - No, pairing is straightforward and doesn’t require a USB receiver.
+8. Can the Microsoft BT5600 track on all surfaces?
+  - It tracks effectively on many surfaces, but for glass, a mouse pad is recommended.
+9. What distinguishes the BT5600’s design?
+  - Its sleek, comfortable design is both functional and aesthetically pleasing.
+10. Is the BT5600 ideal for travel?
+  - Absolutely, its light weight and size make it perfect for mobility-focused users.
+
+MSI Model 100 – Balanced Performer for Work & Play
+Specs Snapshot:
+- Processor: Intel Core i5-13420H (13th Gen, 8-core)
+- RAM: 16GB DDR5
+- Storage: 512GB PCIe Gen4 SSD
+- Graphics: Intel Iris Xe
+- Display: 15.6" FHD IPS, 100% sRGB
+- Weight: 1.78 kg
+- Battery Life: 7–8 hours
+- Ports: USB-C, 2x USB-A, HDMI 2.1, Ethernet
+- OS: Windows 11 Home
+FAQs:
+1. Is the MSI Model 100 suitable for 1080p video editing?
+ Yes, the Intel Core i5-13420H and 16GB DDR5 RAM handle 1080p editing smoothly with Intel Iris Xe graphics.
+2. Does it have a color-accurate display?
+ Yes, the 100% sRGB FHD IPS panel is well-suited for design and creative work.
+3. Can I connect to an external monitor via USB-C?
+ Yes, both the USB-C and HDMI 2.1 ports support external displays.
+4. What kind of SSD is included?
+ A fast 512GB PCIe Gen4 SSD ensures quick boot times and snappy performance.
+5. Is the RAM upgradeable?
+ Yes, DDR5 RAM is upgradeable depending on model configuration.
+6. Is it portable?
+ Weighing 1.78 kg, it's not ultra-light, but manageable for frequent movement.
+7. Can it handle programming or analytics?
+ Absolutely, the i5 chip and 16GB RAM can handle Python, SQL, Excel, and BI tools.
+8. How’s the battery life?
+ Expect around 7–8 hours with regular usage.
+9. Does it support fast charging?
+ Yes, it charges quickly for productivity on the go.
+10. How’s the thermal performance?
+ It remains cool and quiet for general and moderate workloads.
+
+Acer Model 101 – Light, Affordable, and Student-Friendly
+Specs Snapshot:
+- Processor: Intel Core i3-1215U (12th Gen, 6-core)
+- RAM: 8GB LPDDR4X
+- Storage: 256GB PCIe SSD
+- Graphics: Intel UHD Graphics
+- Display: 14" FHD LED, BlueLightShield
+- Weight: 1.45 kg
+- Battery Life: Up to 10 hours
+- Ports: USB-C, 2x USB-A, HDMI, SD card
+- OS: Windows 11 Home
+FAQs:
+1. Is this laptop good for students? Yes, it's ideal for schoolwork, online classes, and everyday productivity.
+2. Can it run MS Office applications? Yes, Word, Excel, and PowerPoint run without issues.
+3. Can I upgrade the RAM? No, the 8GB LPDDR4X RAM is soldered and non-upgradable.
+4. Is it okay for basic coding? Suitable for light coding and web development; not ideal for heavier IDEs.
+5. How’s the webcam and mic quality? Good enough for Zoom calls and online learning.
+6. Does it have eye protection features? Yes, Acer’s BlueLightShield reduces eye strain.
+7. How is the display for daily use? The 14" FHD LED display is crisp and clear for browsing and documents.
+8. Is there an SD card slot? Yes, it includes one for easy media transfer.
+9. Can I connect it to a monitor? Yes, both USB-C and HDMI ports support display output.
+10. Is it lightweight? Yes, at 1.45 kg, it's ultra-portable and bag-friendly.
+
+Lenovo Model 102 – Ultraportable with All-Day Battery for Business Users
+Specs Snapshot:
+- Processor: AMD Ryzen 5 7530U (6-core, 12-thread)
+- RAM: 16GB LPDDR4X (soldered)
+- Storage: 512GB PCIe Gen3 SSD
+- Graphics: Integrated Radeon Graphics
+- Display: 13.3" FHD IPS, Anti-glare
+- Weight: 1.25 kg
+- Battery Life: Up to 13 hours
+- Ports: 2x USB-C, USB-A, HDMI
+- OS: Windows 11 Pro
+FAQs:
+1. Is this good for business professionals? Yes, it comes with Windows 11 Pro, privacy features, and great battery life.
+2. Does it support charging over USB-C? Yes, both USB-C ports support charging and display output.
+3. What’s the battery life like? Up to 13 hours—perfect for travel and long workdays.
+4. Can I upgrade the RAM? No, the 16GB LPDDR4X RAM is soldered and non-upgradable.
+5. Is multitasking smooth? Yes, the Ryzen 5 chip and 16GB RAM handle multiple apps easily.
+6. How’s the display quality? The anti-glare 13.3" IPS screen is sharp and easy on the eyes.
+7. Does it overheat? No, it maintains good thermal performance under normal use.
+8. Can it connect to external monitors? Yes, via HDMI or USB-C.
+9. Is it lightweight? Extremely—it weighs just 1.25 kg.
+10. Is the storage fast enough? Yes, the 512GB PCIe Gen3 SSD ensures quick boot and load times.
+
+Dell Model 103 – Dependable Performer for Everyday Work
+Specs Snapshot:
+- Processor: Intel Core i5-1135G7 (11th Gen, 4-core)
+- RAM: 12GB DDR4
+- Storage: 256GB PCIe SSD
+- Graphics: Intel Iris Xe
+- Display: 15.6" FHD Anti-glare
+- Weight: 1.85 kg
+- Battery Life: 8–9 hours
+- Ports: USB-C, 2x USB-A, HDMI, Ethernet, SD
+- OS: Windows 11 Home
+FAQs:
+1. Is this good for office and productivity use? Yes, it's reliable for multitasking and daily productivity.
+2. Is the keyboard comfortable? Yes, it's a full-size backlit keyboard ideal for typing long hours.
+3. Does it support wired internet? Yes, it includes an Ethernet port.
+4. Is there an SD card reader? Yes, helpful for photographers and media professionals.
+5. Can I upgrade the storage? Yes, the 256GB SSD is upgradable.
+6. What’s the RAM configuration? 12GB DDR4 – usually 4GB soldered + 8GB slot.
+7. How long does the battery last? About 8–9 hours depending on usage.
+8. Can I use dual displays? Yes, via HDMI and USB-C.
+9. How’s it for video conferencing? Decent webcam and mic for Zoom, Teams, etc.
+10. Is it heavy to carry daily? At 1.85 kg, it’s a bit heavier but still manageable.
+
+Asus Model 104 – Powerful & Stylish for Creators
+Specs Snapshot:
+- Processor: Intel Core i7-1360P (13th Gen, 12-core)
+- RAM: 16GB DDR4 (expandable to 24GB)
+- Storage: 1TB PCIe Gen3 SSD
+- Graphics: NVIDIA GeForce MX550
+- Display: 15.6" FHD IPS, 100% sRGB
+- Weight: 1.75 kg
+- Battery Life: Up to 9 hours
+- Ports: USB-C, 2x USB-A, HDMI, MicroSD
+- OS: Windows 11 Home
+FAQs:
+1. Is this suitable for Adobe Suite and light 3D rendering? Yes, the i7 processor, 16GB RAM, and MX550 GPU make it a great machine for Photoshop, Illustrator, Premiere Pro, and basic 3D tasks.
+2. Can I upgrade the RAM or storage later? Yes, the RAM is expandable up to 24GB and the 1TB SSD offers ample room for storage.
+3. How's the display for designers or content creators? It has a 100% sRGB color-accurate screen, perfect for color-critical tasks like photo and video editing.
+4. Does it heat up under creative workloads? Fans do ramp up under load, especially with multitasking or rendering, but cooling is effective.
+5. Is it portable enough for daily commuting? At 1.75 kg, it's reasonably portable for a performance laptop—good balance of power and mobility.
+6. What’s the battery backup like? Expect up to 9 hours of use depending on your workload.
+7. Does it support external displays? Yes, through HDMI and USB-C.
+8. Can it handle casual gaming? Yes, the MX550 can run older titles and light modern games at medium settings.
+9. Is there a MicroSD card reader? Yes, ideal for content creators needing fast transfers.
+10. Does it support fast charging? Yes, for quick recharges between tasks.

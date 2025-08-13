@@ -1,0 +1,76 @@
+{
+  "mice": [
+    {
+      "productId": "M001",
+      "name": "Logitech MX200",
+      "price": 2999,
+      "short_description": "High-performance wireless mouse with ergonomic design.",
+      "stock": 15
+    },
+    {
+      "productId": "M002",
+      "name": "HP Z3700",
+      "price": 1499,
+      "short_description": "Compact wireless mouse perfect for office and travel use.",
+      "stock": 25
+    },
+    {
+      "productId": "M003",
+      "name": "Razer Basilisk X",
+      "price": 3999,
+      "short_description": "Gaming mouse with HyperSpeed wireless technology.",
+      "stock": 12
+    },
+    {
+      "productId": "M004",
+      "name": "Dell WM126",
+      "price": 899,
+      "short_description": "Affordable wireless mouse for everyday computing.",
+      "stock": 30
+    },
+    {
+      "productId": "M005",
+      "name": "Microsoft BT5600",
+      "price": 2199,
+      "short_description": "Bluetooth mouse with compact design and long battery life.",
+      "stock": 18
+    }
+  ],
+  "laptops": [
+    {
+      "productId": "P100",
+      "name": "MSI Model 100",
+      "price": 93885,
+      "short_description": "Powerful laptop with Ryzen 7 processor and 1TB SSD.",
+      "stock": 8
+    },
+    {
+      "productId": "P101",
+      "name": "Acer Model 101",
+      "price": 86216,
+      "short_description": "High-performance laptop with 32GB RAM and Ryzen 7.",
+      "stock": 6
+    },
+    {
+      "productId": "P102",
+      "name": "Lenovo Model 102",
+      "price": 68957,
+      "short_description": "16GB RAM laptop with 256GB SSD and Ryzen 7 processor.",
+      "stock": 10
+    },
+    {
+      "productId": "P103",
+      "name": "Dell Model 103",
+      "price": 99112,
+      "short_description": "Premium laptop with 8GB RAM and 256GB SSD storage.",
+      "stock": 7
+    },
+    {
+      "productId": "P104",
+      "name": "Asus Model 104",
+      "price": 102375,
+      "short_description": "High-end laptop with 32GB RAM and Intel i3 processor.",
+      "stock": 5
+    }
+  ]
+}
