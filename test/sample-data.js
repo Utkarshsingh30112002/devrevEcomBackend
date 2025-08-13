@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const Product = require("../models/products");
 
@@ -715,10 +716,13 @@ const sampleProducts = [
 const seedDatabase = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect("mongodb://localhost:27017/ecommerce", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ecommerce",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
 
     // Clear existing products
     await Product.deleteMany({});

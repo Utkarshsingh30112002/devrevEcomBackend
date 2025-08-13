@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const PincodeDelivery = require("../models/pincodeDelivery");
 
@@ -459,10 +460,13 @@ const pincodeDeliveryData = [
 const seedPincodeDelivery = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect("mongodb://localhost:27017/ecommerce", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ecommerce",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
 
     // Clear existing pincode delivery data
     await PincodeDelivery.deleteMany({});

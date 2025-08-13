@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("../models/users");
 
@@ -211,10 +212,13 @@ const dummyUsers = [
 const seedUsers = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect("mongodb://localhost:27017/ecommerce", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ecommerce",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
 
     // Clear existing users
     await User.deleteMany({});
