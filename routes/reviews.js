@@ -10,7 +10,24 @@ router.get("/", async (req, res) => {
     let filter = {};
 
     // Apply filters
-    if (product) filter.product = product;
+    if (product) {
+      // First try to find by productId (string like "P100")
+      const Product = require("../models/products");
+      const productDoc = await Product.findOne({ productId: product });
+
+      if (productDoc) {
+        filter.product = productDoc._id;
+      } else {
+        // If not found by productId, try as MongoDB ObjectId
+        try {
+          const mongoose = require("mongoose");
+          filter.product = new mongoose.Types.ObjectId(product);
+        } catch (objectIdError) {
+          // If it's not a valid ObjectId either, return empty array
+          return res.json([]);
+        }
+      }
+    }
     if (user) filter.user = user;
     if (rating) filter.rating = Number(rating);
     if (isVerified !== undefined) filter.isVerified = isVerified === "true";
@@ -91,12 +108,43 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// GET reviews by product ID
-router.get("/product/:productId", async (req, res) => {
+// POST reviews by product ID
+router.post("/product", async (req, res) => {
   try {
-    const reviews = await Review.find({ product: req.params.productId })
+    const { productId } = req.body;
+
+    if (!productId) {
+      return res
+        .status(400)
+        .json({ message: "productId is required in request body" });
+    }
+
+    // First try to find by productId (string like "P100")
+    let reviews = await Review.find()
+      .populate({
+        path: "product",
+        match: { productId: productId },
+      })
       .populate("user", "firstName lastName username")
       .sort({ createdAt: -1 });
+
+    // Filter out reviews where product population failed
+    reviews = reviews.filter((review) => review.product);
+
+    // If no reviews found by productId, try as MongoDB ObjectId
+    if (reviews.length === 0) {
+      try {
+        const mongoose = require("mongoose");
+        const objectId = new mongoose.Types.ObjectId(productId);
+        reviews = await Review.find({ product: objectId })
+          .populate("user", "firstName lastName username")
+          .populate("product", "name productId")
+          .sort({ createdAt: -1 });
+      } catch (objectIdError) {
+        // If it's not a valid ObjectId either, return empty array
+        reviews = [];
+      }
+    }
 
     res.json(reviews);
   } catch (error) {
@@ -104,10 +152,18 @@ router.get("/product/:productId", async (req, res) => {
   }
 });
 
-// GET reviews by user ID
-router.get("/user/:userId", async (req, res) => {
+// POST reviews by user ID
+router.post("/user", async (req, res) => {
   try {
-    const reviews = await Review.find({ user: req.params.userId })
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ message: "userId is required in request body" });
+    }
+
+    const reviews = await Review.find({ user: userId })
       .populate("product", "name productId")
       .sort({ createdAt: -1 });
 
@@ -140,13 +196,43 @@ router.patch("/:id/helpful", async (req, res) => {
   }
 });
 
-// GET average rating for a product
-router.get("/product/:productId/average", async (req, res) => {
+// POST average rating for a product
+router.post("/product/average", async (req, res) => {
   try {
+    const { productId } = req.body;
+    const mongoose = require("mongoose");
+
+    if (!productId) {
+      return res
+        .status(400)
+        .json({ message: "productId is required in request body" });
+    }
+
+    let productObjectId;
+
+    // First try to find product by productId (string like "P100")
+    const Product = require("../models/products");
+    const product = await Product.findOne({ productId: productId });
+
+    if (product) {
+      productObjectId = product._id;
+    } else {
+      // If not found by productId, try as MongoDB ObjectId
+      try {
+        productObjectId = new mongoose.Types.ObjectId(productId);
+      } catch (objectIdError) {
+        return res.json({
+          averageRating: 0,
+          totalReviews: 0,
+          ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+        });
+      }
+    }
+
     const result = await Review.aggregate([
       {
         $match: {
-          product: new require("mongoose").Types.ObjectId(req.params.productId),
+          product: productObjectId,
         },
       },
       {
