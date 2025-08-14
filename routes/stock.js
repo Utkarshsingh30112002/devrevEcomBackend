@@ -26,6 +26,7 @@ router.get("/", async (req, res) => {
         name: 1,
         price: 1,
         stock: 1,
+        specs: 1,
         _id: 0, // Exclude MongoDB _id
       }
     ).sort({ productId: 1 });
@@ -37,6 +38,7 @@ router.get("/", async (req, res) => {
       price: product.price,
       short_description: getShortDescription(product.name, type),
       stock: product.stock,
+      specs: product.specs,
     }));
 
     res.json({
@@ -97,6 +99,7 @@ router.get("/check/:productId", async (req, res) => {
         price: 1,
         stock: 1,
         category: 1,
+        specs: 1,
         _id: 0,
       }
     );
@@ -119,6 +122,7 @@ router.get("/check/:productId", async (req, res) => {
         short_description: getShortDescription(product.name, type),
         stock: product.stock,
         type: type,
+        specs: product.specs,
       },
     });
   } catch (error) {
@@ -148,6 +152,7 @@ router.get("/low", async (req, res) => {
       price: 1,
       stock: 1,
       category: 1,
+      specs: 1,
       _id: 0,
     }).sort({ stock: 1 });
 
@@ -160,6 +165,7 @@ router.get("/low", async (req, res) => {
         short_description: getShortDescription(product.name, type),
         stock: product.stock,
         type: type,
+        specs: product.specs,
       };
     });
 
