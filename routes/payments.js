@@ -74,6 +74,9 @@ router.post("/saved-cards/:userId", async (req, res) => {
       });
     }
 
+    // Normalize card type to lowercase
+    const normalizedCardType = cardType.toLowerCase();
+
     // Validate card number format
     if (!/^\d{4}-\d{4}-\d{4}-\d{4}$/.test(cardNumber)) {
       return res.status(400).json({
@@ -103,7 +106,7 @@ router.post("/saved-cards/:userId", async (req, res) => {
 
     const cardData = {
       cardNumber,
-      cardType,
+      cardType: normalizedCardType,
       cardholderName,
       expiryMonth: parseInt(expiryMonth),
       expiryYear: parseInt(expiryYear),

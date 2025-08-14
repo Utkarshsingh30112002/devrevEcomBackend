@@ -208,6 +208,72 @@ router.get("/summary", async (req, res) => {
   }
 });
 
+// POST /api/pincode-delivery/add - Add new pincode delivery data (admin)
+router.post("/add", async (req, res) => {
+  try {
+    const {
+      pincode,
+      city,
+      region,
+      standardDelivery,
+      fastDelivery,
+      additionalCost = 0,
+      deliveryZones = "tier2",
+    } = req.body;
+
+    // Validate required fields
+    if (!pincode || !city || !region || !standardDelivery || !fastDelivery) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Pincode, city, region, standardDelivery, and fastDelivery are required",
+      });
+    }
+
+    // Validate pincode format
+    if (!/^\d{6}$/.test(pincode)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid pincode format. Must be 6 digits.",
+      });
+    }
+
+    // Check if pincode already exists
+    const existing = await PincodeDelivery.findOne({ pincode: pincode });
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        message: "Pincode already exists",
+      });
+    }
+
+    // Create new pincode delivery record
+    const newDelivery = new PincodeDelivery({
+      pincode,
+      city,
+      region,
+      standardDelivery,
+      fastDelivery,
+      additionalCost,
+      deliveryZones,
+    });
+
+    await newDelivery.save();
+
+    res.json({
+      success: true,
+      message: "Pincode delivery data added successfully",
+      data: newDelivery,
+    });
+  } catch (error) {
+    console.error("Add pincode delivery error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error adding pincode delivery data",
+    });
+  }
+});
+
 // POST /api/pincode-delivery/calculate - Calculate delivery cost and time
 router.post("/calculate", async (req, res) => {
   try {

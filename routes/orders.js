@@ -119,6 +119,8 @@ router.post("/create", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error creating order",
+      error: error.message,
+      stack: error.stack,
     });
   }
 });

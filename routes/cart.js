@@ -120,7 +120,6 @@ router.post("/:userId/add", async (req, res) => {
       productId: product.productId,
       name: product.name,
       price: product.price,
-      short_description: getShortDescription(product.name, type),
       imageUrl: product.imageUrl,
       type: type,
     };
