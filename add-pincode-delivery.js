@@ -77,4 +77,3 @@ const addPincodeDelivery = async () => {
 
 // Run the function
 addPincodeDelivery();
-

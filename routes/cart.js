@@ -122,6 +122,7 @@ router.post("/:userId/add", async (req, res) => {
       price: product.price,
       imageUrl: product.imageUrl,
       type: type,
+      short_description: getShortDescription(product.name, type),
     };
 
     // Add item to cart
