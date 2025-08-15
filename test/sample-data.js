@@ -367,7 +367,8 @@ const sampleProducts = [
           "Absolutely, its light weight and size make it perfect for mobility-focused users.",
       },
     ],
-  },  {
+  },
+  {
     productId: "M006",
     name: "Logitech G-Force Pro Wireless",
     description:
@@ -375,7 +376,7 @@ const sampleProducts = [
     price: 9499,
     brand: "Logitech",
     imageUrl:
-      "https://images.unsplash.com/photo-1615663245611-4b9911475594?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGdhbWluZyUyMG1vdXNlfGVufDB8fDB8fHww",
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
     stock: 12,
     category: "mouse",
     specs: {
@@ -428,7 +429,7 @@ const sampleProducts = [
     price: 4299,
     brand: "Corsair",
     imageUrl:
-      "https://images.unsplash.com/photo-1607538211439-f2e08b1a518a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmdiJTIwbW91c2V8ZW58MHx8MHx8fDA%3D",
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
     stock: 22,
     category: "mouse",
     specs: {
@@ -481,7 +482,7 @@ const sampleProducts = [
     price: 899,
     brand: "Dell",
     imageUrl:
-      "https://images.unsplash.com/photo-1629425473804-ac544520c48e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8b2ZmaWNlJTIwbW91c2V8ZW58MHx8MHx8fDA%3D",
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
     stock: 65,
     category: "mouse",
     specs: {
@@ -505,7 +506,8 @@ const sampleProducts = [
           "It uses a single AA battery. Yes, one AA battery is typically included in the package to get you started right away.",
       },
       {
-        question: "Is this mouse suitable for both left and right-handed users?",
+        question:
+          "Is this mouse suitable for both left and right-handed users?",
         answer:
           "Yes, it has a symmetrical, ambidextrous design that is comfortable for both left-handed and right-handed users.",
       },
@@ -535,7 +537,7 @@ const sampleProducts = [
     price: 93885,
     brand: "MSI",
     imageUrl:
-      "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bGFwdG9wfGVufDB8fDB8fHww",
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
     stock: 5,
     category: "laptop",
     specs: {
@@ -796,7 +798,8 @@ const sampleProducts = [
         question: "Can I use dual displays?",
         answer: "Yes, via HDMI and USB-C.",
       },
-      {question: "How's it for video conferencing?",
+      {
+        question: "How's it for video conferencing?",
         answer: "Decent webcam and mic for Zoom, Teams, etc.",
       },
       {
@@ -885,7 +888,7 @@ const sampleProducts = [
     price: 38990,
     brand: "Acer",
     imageUrl:
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bGFwdG9wfGVufDB8fDB8fHww",
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
     stock: 25,
     category: "laptop",
     specs: {
@@ -902,7 +905,8 @@ const sampleProducts = [
     },
     faq: [
       {
-        question: "Is this laptop good for online classes and using Microsoft Office?",
+        question:
+          "Is this laptop good for online classes and using Microsoft Office?",
         answer:
           "Absolutely. It's designed specifically for these tasks, offering smooth performance for video calls, browsing, word processing, and spreadsheets.",
       },
@@ -944,17 +948,17 @@ const sampleProducts = [
     ],
   },
   {
-        productId: "P106",
+    productId: "P106",
     name: "Lenovo Ideapad Slim 3(2025)",
     description:
       "Celebrate your own independence to achieve, create, and innovate with the Lenovo IdeaPad Slim 3 (2025 Edition). This laptop is engineered for the next generation of India's doers—the ambitious students, the resourceful startup founders, and the hybrid professionals of Bengaluru who demand performance without compromise. It's a smart powerhouse that doesn't just enable your work; it accelerates it, offering the freedom to tackle demanding tasks from anywhere your hustle takes you.The Multitasking Powerhouse: AMD Ryzen 5 & 16GB RAM\nAt the core of the IdeaPad Slim 3 is the formidable AMD Ryzen 5 7530U processor. With 6 cores and 12 threads, this CPU is a multitasking beast, built to handle modern, complex workloads with remarkable efficiency. This means you can compile code in VS Code, run a local server, manage a data-heavy Excel workbook, and participate in a high-definition Microsoft Teams call simultaneously, all without a hint of lag. Supporting this powerhouse is a generous 16GB of high-speed DDR4 RAM. This is the end of multitasking compromises, providing a massive performance ceiling that ensures your workflow remains fluid and responsive, today and for years to come. The lightning-fast 512GB NVMe SSD ensures your system boots in seconds and your applications load instantly, keeping you in a state of uninterrupted flow.A Vibrant Window to Your Work\nYour ideas come to life on the 14-inch Full HD IPS display. This screen is the perfect balance of portability and productivity, offering crisp details, vibrant colours, and wide viewing angles thanks to its IPS panel—perfect for sharing your screen during a team collaboration. With 300 nits of brightness and an anti-glare finish, it remains clear and comfortable to view in various lighting conditions, from a brightly lit office to a seat by the window in your favourite café. The experience is enhanced by user-facing speakers tuned with Dolby Audio, delivering clear and immersive sound for both video calls and entertainment.Premium Design, Practical Experience\nThe IdeaPad Slim 3 lives up to its name with a sleek, lightweight chassis weighing just 1.4 kg, making it an effortless companion on your daily commute. The design is clean, professional, and features the legendary Lenovo keyboard—a backlit, ergonomic layout with sculpted keycaps that provides a quiet, comfortable, and exceptionally accurate typing experience, perfect for long coding sessions or writing reports. Security and convenience are seamlessly integrated with a one-touch fingerprint reader on the power button for instant, secure login with Windows Hello, and a physical privacy shutter on the webcam for absolute peace of mind.Connectivity for the Modern Professional\nThis laptop is equipped for the demands of a modern workflow. A full-function USB-C port allows you to charge the device, transfer data at high speeds, and connect to an external 4K display—all with a single cable. This is complemented by traditional USB-A ports, HDMI, and the latest Wi-Fi 6 for blazing-fast, reliable wireless connectivity in congested environments. The 7-8 hour battery life is built for the unpredictable Bengaluru workday, and with Lenovo's RapidCharge technology, a quick 60-minute charge can restore up to 80% of the battery, ensuring you're always ready for what's next.In summary, the Lenovo IdeaPad Slim 3 is the intelligent choice for those who are ready to take their ambitions to the next level. It's a feature-packed, reliable, and powerful machine that delivers a premium experience without the premium price tag.",
-            price: 48490,
+    price: 48490,
     brand: "Lenovo",
     imageUrl:
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGxlbm92byUyMGxhcHRvcHxlbnwwfHwwfHx8MA%3D%3D",
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
     stock: 18,
     category: "laptop",
-            specs: {
+    specs: {
       ram: "16GB DDR4 (Soldered)",
       storage: "512GB PCIe Gen3 SSD",
       processor: "AMD Ryzen 5 7530U (6-Core, 12-Thread)",
@@ -969,7 +973,8 @@ const sampleProducts = [
     },
     faq: [
       {
-        question: "Is this laptop good for programming and software development?",
+        question:
+          "Is this laptop good for programming and software development?",
         answer:
           "Yes, it's an excellent choice. The powerful 6-core Ryzen 5 processor and 16GB of RAM can comfortably handle coding, compiling, and running local servers and virtual machines.",
       },
@@ -1011,17 +1016,17 @@ const sampleProducts = [
     ],
   },
   {
-        productId: "P107",
+    productId: "P107",
     name: "Asus VivoBook 14",
     description:
       "In today's digital world, having a reliable laptop is no longer a luxury—it's an essential gateway to learning, connection, and opportunity. The Asus VivoBook Go 14 is engineered to be that perfect first step. It is a smart, accessible, and ultra-portable laptop designed for the students, first-time users, and families of India who need a dependable companion for their daily digital journey. For those in bustling hubs like Bengaluru, it provides the freedom to learn online, stay connected, and manage everyday tasks with ease and efficiency.Essential Everyday Performance\nAt the heart of the VivoBook Go 14 is the efficient Intel Celeron N4500 processor. This CPU is designed to handle your essential daily tasks—like web browsing with multiple tabs, sending emails, attending video calls, and working on documents in Microsoft Office—with smooth, responsive performance while sipping power. It is paired with 8GB of fast LPDDR4 RAM, a crucial feature that ensures you can multitask between a few applications without frustrating slowdowns. The 256GB NVMe SSD provides a massive speed boost compared to older laptops; your system boots up in seconds, applications launch quickly, and your files are always instantly accessible.Clear and Comfortable Viewing\nThe 14-inch HD (1366x768) display is bright and clear for all your daily needs. The anti-glare finish is a key feature, reducing distracting reflections and making it comfortable to view for hours, whether you're in a brightly lit classroom or working near a window at home. The compact screen size, combined with slim bezels, creates an immersive viewing experience while maintaining the laptop's excellent portability.Designed for Life on the Go\nWeighing an incredibly light 1.3 kg and featuring a slim profile, the VivoBook Go 14 is built for mobility. It's effortless to carry in a backpack across campus or in a tote bag to a nearby café. The practical design includes a clever 180-degree lay-flat hinge, which makes it easy to share your screen with a classmate or colleague during collaborative projects. Despite its price, the build is durable and designed to handle the demands of everyday use.All-Day Battery for True Portability\nOne of the standout features of the VivoBook Go 14 is its exceptional battery life. Thanks to its power-efficient processor, you can get up to 10 hours of use on a single charge. This gives you the true freedom to leave the charger at home and get through a full day of classes, work, or browsing from the couch without ever worrying about finding a power outlet. It's the ultimate companion for a life in motion.In summary, the Asus VivoBook Go 14 is the smart, simple, and incredibly accessible laptop that provides all the essentials for a productive digital life. It is the perfect, value-driven choice for anyone needing a reliable and long-lasting companion for learning, connecting, and exploring the world online.",
-                price: 27990,
+    price: 27990,
     brand: "Asus",
     imageUrl:
-      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wfGVufDB8fDB8fHww",
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
     stock: 45,
     category: "laptop",
-                specs: {
+    specs: {
       ram: "8GB LPDDR4 (Soldered)",
       storage: "256GB NVMe SSD",
       processor: "Intel Celeron N4500 (Dual-Core)",
@@ -1033,19 +1038,22 @@ const sampleProducts = [
       ports: "1x USB-C (Data), 1x USB-A 3.2, 1x USB-A 2.0, HDMI",
       os: "Windows 11 Home",
     },
-                faq: [
+    faq: [
       {
-        question: "Is this laptop fast enough for everyday tasks like browsing and watching YouTube?",
+        question:
+          "Is this laptop fast enough for everyday tasks like browsing and watching YouTube?",
         answer:
           "Yes, absolutely. It is specifically designed for these essential tasks and provides a smooth, responsive experience for web browsing, video streaming, email, and Microsoft Office.",
       },
       {
-        question: "Can it run software like Photoshop or be used for video editing?",
+        question:
+          "Can it run software like Photoshop or be used for video editing?",
         answer:
           "No, this laptop is not powerful enough for demanding creative software. It is intended for light productivity, browsing, and media consumption.",
       },
       {
-        question: "Is the HD screen resolution good enough for a 14-inch display?",
+        question:
+          "Is the HD screen resolution good enough for a 14-inch display?",
         answer:
           "Yes, for a 14-inch screen, the HD resolution is sharp and clear for everyday tasks like reading text, attending online classes, and watching videos.",
       },
@@ -1074,7 +1082,6 @@ const sampleProducts = [
         answer:
           "It comes with a standard webcam that is perfectly suitable for clear video during online classes and meetings on platforms like Zoom, Google Meet, and Microsoft Teams.",
       },
-      
     ],
   },
 ];
