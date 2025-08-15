@@ -1117,6 +1117,283 @@ const sampleReviews = [
     tags: ["verified purchase", "project coordinator"],
     productId: "M005",
   },
+  {
+    title: "Absolute Gaming Beast!",
+    content:
+      "This mouse is incredible for competitive gaming. The HERO 25K sensor is ridiculously accurate, and the LIGHTSPEED wireless connection feels faster than my old wired mouse. The ultra-lightweight design makes flick shots so much easier. Battery life is amazing - I've been using it for 3 days straight and still have 40% left. Worth every penny for serious gamers!",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 12,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "gamer"],
+    productId: "M006",
+  },
+  {
+    title: "Perfect for FPS Games",
+    content:
+      "Been using this for Valorant and CS2. The 25,600 DPI sensor is overkill but the precision is unmatched. The LIGHTFORCE switches feel crisp and responsive. Only minor issue is the lack of RGB, but that's actually better for battery life. The weight is perfect for my claw grip style.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 8,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "competitive gamer"],
+    productId: "M006",
+  },
+  {
+    title: "Great but expensive",
+    content:
+      "The performance is outstanding and the wireless freedom is amazing. However, the price tag is quite steep. If you're a casual gamer, you might want to look at cheaper options. But for competitive players, this is definitely worth the investment.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 5,
+    isNotHelpful: 2,
+    tags: ["verified purchase", "gamer"],
+    productId: "M006",
+  },
+
+  // Reviews for M007 - Corsair Sabre Elite RGB
+  {
+    title: "RGB Masterpiece with Performance",
+    content:
+      "The RGB lighting is absolutely stunning and the 2,000Hz polling rate makes everything feel incredibly responsive. The 8 programmable buttons are perfect for MMO games. The Omron switches feel great and the braided cable is high quality. iCUE software is powerful but can be overwhelming at first.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 15,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "gamer"],
+    productId: "M007",
+  },
+  {
+    title: "Solid Gaming Mouse",
+    content:
+      "Good performance and the RGB looks great. The 18,000 DPI sensor is more than enough for my needs. The weight feels balanced and the ergonomic design is comfortable for long gaming sessions. The onboard memory is a nice touch for saving profiles.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 6,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "gamer"],
+    productId: "M007",
+  },
+  {
+    title: "Decent but could be better",
+    content:
+      "The mouse performs well and the RGB is nice, but I find the iCUE software to be buggy sometimes. The cable is good quality but I wish it was detachable. For the price, it's a solid choice but there are better options out there.",
+    rating: 3,
+    isVerified: true,
+    isHelpful: 3,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "gamer"],
+    productId: "M007",
+  },
+
+  // Reviews for M008 - Dell Essential WM301 Wireless Mouse
+  {
+    title: "Perfect for Office Work",
+    content:
+      "This mouse is exactly what I needed for my office setup. The 18-month battery life is incredible - I've been using it for 6 months and haven't changed the battery yet! The ambidextrous design is comfortable and the 1000 DPI is perfect for productivity tasks. Great value for money.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 20,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "office worker"],
+    productId: "M008",
+  },
+  {
+    title: "Simple and Reliable",
+    content:
+      "No fancy features, just a solid wireless mouse that works. Perfect for students and basic office work. The setup is plug-and-play, no drivers needed. The compact size makes it great for travel. Battery life is impressive as advertised.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 12,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "student"],
+    productId: "M008",
+  },
+  {
+    title: "Good budget option",
+    content:
+      "For the price, this is a decent wireless mouse. It's comfortable to use and the battery life is good. However, the tracking could be more precise and the scroll wheel feels a bit cheap. But for basic tasks, it gets the job done.",
+    rating: 3,
+    isVerified: true,
+    isHelpful: 7,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "casual user"],
+    productId: "M008",
+  },
+
+  // Reviews for P105 - Acer Aspire Lite AL105
+  {
+    title: "Great for Students",
+    content:
+      "Perfect laptop for my college studies. The Intel i3 processor handles all my coursework smoothly - Word, Excel, PowerPoint, and web browsing work great. The 15.6-inch screen is comfortable for long study sessions. Battery life is decent for a full day of classes. Great value for students on a budget!",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 18,
+    isNotHelpful: 2,
+    tags: ["verified purchase", "student"],
+    productId: "P105",
+  },
+  {
+    title: "Solid Entry-Level Laptop",
+    content:
+      "This laptop exceeded my expectations for the price. The 12th Gen i3 processor is surprisingly capable for everyday tasks. The 512GB SSD makes everything fast and the 8GB RAM is sufficient for multitasking. The build quality is decent for a budget laptop. Perfect for basic computing needs.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 14,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "casual user"],
+    productId: "P105",
+  },
+  {
+    title: "Good but limited",
+    content:
+      "The laptop works well for basic tasks like browsing and office work. However, it struggles with anything more demanding. The lack of backlit keyboard is disappointing for the price. Battery life is okay but not great. It's a decent choice for light users.",
+    rating: 3,
+    isVerified: true,
+    isHelpful: 9,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "casual user"],
+    productId: "P105",
+  },
+
+  // Reviews for P106 - Lenovo Ideapad Slim 3(2025)
+  {
+    title: "Excellent for Programming",
+    content:
+      "This laptop is perfect for my software development work. The AMD Ryzen 5 processor with 16GB RAM handles multiple IDEs, Docker containers, and browser tabs without any lag. The 14-inch screen is portable yet productive. The fingerprint reader and privacy shutter are nice security features. RapidCharge is a lifesaver!",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 25,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "developer"],
+    productId: "P106",
+  },
+  {
+    title: "Powerful and Portable",
+    content:
+      "Great balance of performance and portability. The 6-core Ryzen 5 processor is fast and the 16GB RAM ensures smooth multitasking. The IPS display has good colors and viewing angles. The backlit keyboard is comfortable for long typing sessions. Battery life is impressive with RapidCharge technology.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 19,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "professional"],
+    productId: "P106",
+  },
+  {
+    title: "Good but expensive",
+    content:
+      "The performance is excellent and the build quality is solid. However, the price is quite high for what you get. The soldered RAM means no future upgrades. The 14-inch screen might be too small for some users. Overall good laptop but consider your needs before buying.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 11,
+    isNotHelpful: 2,
+    tags: ["verified purchase", "professional"],
+    productId: "P106",
+  },
+
+  // Reviews for P107 - Asus VivoBook 14
+  {
+    title: "Perfect for Online Classes",
+    content:
+      "Bought this for my daughter's online schooling and it's been perfect! The 10-hour battery life means she can attend all her classes without charging. The lightweight design makes it easy for her to carry around. The Celeron processor handles Zoom calls and basic school work smoothly. Great value for students!",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 22,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "student"],
+    productId: "P107",
+  },
+  {
+    title: "Excellent Budget Laptop",
+    content:
+      "For under 30k, this laptop offers great value. The battery life is outstanding - I can work all day without charging. The lightweight design is perfect for travel. The HD screen is adequate for basic tasks. The 256GB SSD is fast and the 8GB RAM handles everyday tasks well. Perfect for casual users.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 16,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "casual user"],
+    productId: "P107",
+  },
+  {
+    title: "Basic but functional",
+    content:
+      "This laptop does what it's supposed to do - basic computing tasks. The battery life is impressive and the portability is great. However, the Celeron processor is quite slow and the HD screen resolution is low. The lack of backlit keyboard is disappointing. Good for very basic needs only.",
+    rating: 3,
+    isVerified: true,
+    isHelpful: 8,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "casual user"],
+    productId: "P107",
+  },
+
+  // Additional reviews for variety
+  {
+    title: "Tournament Ready",
+    content:
+      "Used this in my last esports tournament and it performed flawlessly. The wireless connection was stable throughout the entire event. The lightweight design reduced fatigue during long gaming sessions. The HERO sensor is incredibly accurate for precise aiming. Highly recommended for competitive players.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 30,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "competitive gamer"],
+    productId: "M006",
+  },
+  {
+    title: "Content Creator's Dream",
+    content:
+      "As a YouTuber, I need a laptop that can handle video editing and this one delivers! The Ryzen 5 processor with 16GB RAM handles 1080p editing smoothly. The IPS display has good color accuracy. The fingerprint reader is convenient and the privacy shutter gives peace of mind during video calls.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 28,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "content creator"],
+    productId: "P106",
+  },
+  {
+    title: "Travel Companion",
+    content:
+      "Perfect mouse for business travel. The compact design fits easily in my laptop bag. The 18-month battery life means I don't need to carry spare batteries. The nano receiver stores inside the mouse so I never lose it. Works perfectly with my MacBook and Windows laptop.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 15,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "business traveler"],
+    productId: "M008",
+  },
+  {
+    title: "First Laptop Experience",
+    content:
+      "This is my first laptop and I'm very happy with it. The setup was easy and it handles all my basic needs - browsing, watching videos, and using Microsoft Office. The 15.6-inch screen is comfortable for watching movies. The price was perfect for my budget as a first-time buyer.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 13,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "first-time buyer"],
+    productId: "P105",
+  },
+  {
+    title: "RGB Enthusiast's Choice",
+    content:
+      "The RGB lighting is absolutely gorgeous and the iCUE software offers endless customization options. The 2,000Hz polling rate makes gaming feel incredibly responsive. The 8 programmable buttons are perfect for my MMO gaming needs. The braided cable is high quality and the mouse feels premium.",
+    rating: 5,
+    isVerified: true,
+    isHelpful: 21,
+    isNotHelpful: 1,
+    tags: ["verified purchase", "gamer"],
+    productId: "M007",
+  },
+  {
+    title: "Family Laptop",
+    content:
+      "Bought this for the whole family to use. It's perfect for everyone's needs - kids use it for online classes, wife uses it for browsing and social media, and I use it for basic work tasks. The battery life is amazing and the lightweight design makes it easy to move around the house.",
+    rating: 4,
+    isVerified: true,
+    isHelpful: 17,
+    isNotHelpful: 0,
+    tags: ["verified purchase", "family user"],
+    productId: "P107",
+  },
+  
 ];
 
 // Function to seed reviews

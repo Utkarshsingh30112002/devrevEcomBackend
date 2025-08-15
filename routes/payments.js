@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { UserPayment, Transaction } = require("../models/payments");
 const Order = require("../models/orders");
+const OTP = require("../models/otp");
+const { transporter } = require("../config/email");
 
 // GET /api/payments/saved-cards/:userId - Get user's saved cards
 router.get("/saved-cards/:userId", async (req, res) => {
@@ -218,6 +220,68 @@ router.delete("/saved-cards/:userId/:cardNumber", async (req, res) => {
   }
 });
 
+// POST /api/payments/send-otp - Send OTP for payment verification
+router.post("/send-otp", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Validate required fields
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
+    // Generate random 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Save OTP to database
+    await OTP.create({
+      email,
+      otp,
+    });
+
+    // Email configuration for payment OTP
+    const mailOptions = {
+      from: "utkarshsingh8871@gmail.com",
+      to: email,
+      subject: "Payment Verification OTP",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #333; text-align: center;">Payment Verification OTP</h2>
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 0; font-size: 16px; color: #555;">
+              Your OTP for payment verification is:
+            </p>
+            <h1 style="text-align: center; color: #007bff; font-size: 48px; margin: 20px 0; letter-spacing: 8px;">
+              ${otp}
+            </h1>
+          </div>
+          <p style="font-size: 14px; color: #888; text-align: center;">
+            If you didn't request this OTP, please ignore this email.
+          </p>
+        </div>
+      `,
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({
+      success: true,
+      message: `Payment verification OTP sent successfully to ${email}`,
+    });
+  } catch (error) {
+    console.error("Error sending payment OTP:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send payment OTP",
+      error: error.message,
+    });
+  }
+});
+
 // POST /api/payments/process - Process payment
 router.post("/process", async (req, res) => {
   try {
@@ -235,6 +299,7 @@ router.post("/process", async (req, res) => {
       accountNumber,
       saveCard = false,
       otp,
+      userEmail, // Add userEmail for OTP verification
     } = req.body;
 
     if (!orderId || !userId || !amount || !paymentMethod) {
@@ -244,8 +309,14 @@ router.post("/process", async (req, res) => {
       });
     }
 
-    if (paymentMethod === "card") {
-      if (otp && otp !== "8080") {
+    // Simple OTP verification for card payments
+    if (paymentMethod === "card" && otp) {
+      const otpRecord = await OTP.findOne({
+        email: req.body.userEmail,
+        otp,
+      });
+
+      if (!otpRecord) {
         return res.status(400).json({
           success: false,
           message: "Invalid OTP",
