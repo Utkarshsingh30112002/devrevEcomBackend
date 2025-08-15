@@ -47,7 +47,6 @@ router.post("/send", async (req, res) => {
     res.status(200).json({
       success: true,
       message: "OTP sent successfully to utkarshsingh30112002@gmail.com",
-      otp: "8080", // For development purposes, returning the OTP
     });
   } catch (error) {
     console.error("Error sending OTP:", error);
