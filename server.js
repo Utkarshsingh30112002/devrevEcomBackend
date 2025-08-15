@@ -5,6 +5,7 @@ const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
 const connectDB = require("./config/database");
+const { verifyConnection } = require("./config/email");
 
 // Import routes
 const productRoutes = require("./routes/products");
@@ -16,11 +17,15 @@ const addressRoutes = require("./routes/addresses");
 const pincodeDeliveryRoutes = require("./routes/pincodeDelivery");
 const orderRoutes = require("./routes/orders");
 const paymentRoutes = require("./routes/payments");
+const otpRoutes = require("./routes/otp");
 
 const app = express();
 
 // Connect to MongoDB
 connectDB();
+
+// Verify email connection
+verifyConnection();
 
 // Security middleware
 app.use(helmet());
@@ -49,6 +54,7 @@ app.use("/api/addresses", addressRoutes);
 app.use("/api/pincode-delivery", pincodeDeliveryRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/otp", otpRoutes);
 
 // Basic route
 app.get("/", (req, res) => {

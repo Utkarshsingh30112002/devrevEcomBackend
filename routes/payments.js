@@ -234,6 +234,7 @@ router.post("/process", async (req, res) => {
       bankName,
       accountNumber,
       saveCard = false,
+      otp,
     } = req.body;
 
     if (!orderId || !userId || !amount || !paymentMethod) {
@@ -241,6 +242,15 @@ router.post("/process", async (req, res) => {
         success: false,
         message: "Order ID, user ID, amount, and payment method are required",
       });
+    }
+
+    if (paymentMethod === "card") {
+      if (otp && otp !== "8080") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid OTP",
+        });
+      }
     }
 
     // Validate order exists
