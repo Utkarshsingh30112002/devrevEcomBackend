@@ -13,7 +13,7 @@ const sampleProducts = [
     price: 2999,
     brand: "Logitech",
     imageUrl:
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
+      "https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdXNlfGVufDB8fDB8fHww",
     stock: 15,
     category: "mouse",
     specs: {
@@ -89,7 +89,7 @@ const sampleProducts = [
     price: 1499,
     brand: "HP",
     imageUrl:
-      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1639120346883-897e8ea1d4f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aHAlMjBtb3VzZXxlbnwwfHwwfHx8MA%3D%3D",
     stock: 20,
     category: "mouse",
     specs: {
@@ -537,7 +537,7 @@ const sampleProducts = [
     price: 93885,
     brand: "MSI",
     imageUrl:
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
+      "https://images.unsplash.com/photo-1657936412057-67a8bb0a04a8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     stock: 5,
     category: "laptop",
     specs: {
@@ -679,7 +679,7 @@ const sampleProducts = [
     price: 68957,
     brand: "Lenovo",
     imageUrl:
-      "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bGFwdG9wfGVufDB8fDB8fHww",
+      "https://plus.unsplash.com/premium_photo-1681566925324-ee1e65d9d53e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGFjZXIlMjBsYXB0b3B8ZW58MHx8MHx8fDA%3D",
     stock: 10,
     category: "laptop",
     specs: {
@@ -816,7 +816,7 @@ const sampleProducts = [
     price: 102375,
     brand: "Asus",
     imageUrl:
-      "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bGFwdG9wfGVufDB8fDB8fHww",
+      "https://plus.unsplash.com/premium_photo-1681336999969-516d993e88cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGFzdXMlMjBsYXB0b3B8ZW58MHx8MHx8fDA%3D",
     stock: 4,
     category: "laptop",
     specs: {
@@ -888,7 +888,7 @@ const sampleProducts = [
     price: 38990,
     brand: "Acer",
     imageUrl:
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
+      "https://images.unsplash.com/photo-1555117391-6c0795768da8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     stock: 25,
     category: "laptop",
     specs: {
@@ -955,7 +955,7 @@ const sampleProducts = [
     price: 48490,
     brand: "Lenovo",
     imageUrl:
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
+      "https://images.unsplash.com/photo-1504707748692-419802cf939d?q=80&w=1147&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     stock: 18,
     category: "laptop",
     specs: {
@@ -1023,7 +1023,7 @@ const sampleProducts = [
     price: 27990,
     brand: "Asus",
     imageUrl:
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
+      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     stock: 45,
     category: "laptop",
     specs: {
