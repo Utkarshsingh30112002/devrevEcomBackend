@@ -86,11 +86,10 @@ pincodeDeliverySchema.virtual("fastDeliveryTime").get(function () {
 pincodeDeliverySchema.methods.calculateDeliveryCost = function (
   deliveryType = "standard"
 ) {
-  const baseCost = 100; // Base delivery cost
   if (deliveryType === "fast") {
-    return baseCost + this.additionalCost;
+    return this.additionalCost; // Fast delivery uses additional cost
   }
-  return baseCost;
+  return 0; // Standard delivery is free
 };
 
 // Method to get delivery timeframe
