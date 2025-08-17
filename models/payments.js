@@ -242,7 +242,7 @@ transactionSchema.statics.processPayment = async function (paymentData) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // Dummy payment logic - 90% success rate
-  const isSuccess = Math.random() > 0.1;
+  const isSuccess = true;
   const gatewayTransactionId = isSuccess
     ? `GTW${Date.now()}${Math.floor(Math.random() * 1000)}`
     : null;

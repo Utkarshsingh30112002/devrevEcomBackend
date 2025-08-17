@@ -143,7 +143,7 @@ orderSchema.virtual("isPaid").get(function () {
 // Method to calculate totals
 orderSchema.methods.calculateTotals = function () {
   this.subtotal = this.items.reduce((sum, item) => sum + item.totalPrice, 0);
-  this.tax = Math.round(this.subtotal * 0.18); // 18% GST
+  this.tax = 0; // No tax applied
   this.totalAmount =
     this.subtotal + this.deliveryCost + this.tax - this.discount;
   return this;
