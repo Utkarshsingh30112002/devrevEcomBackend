@@ -305,10 +305,8 @@ router.post("/calculate", async (req, res) => {
     const deliveryCost = delivery.calculateDeliveryCost(deliveryType);
     const timeframe = delivery.getDeliveryTimeframe(deliveryType);
 
-    // Calculate free delivery threshold (example: free delivery for orders above ₹999)
-    const freeDeliveryThreshold = 999;
-    const isFreeDelivery = orderAmount >= freeDeliveryThreshold;
-    const finalDeliveryCost = isFreeDelivery ? 0 : deliveryCost;
+    // No free delivery threshold - use actual delivery cost
+    const finalDeliveryCost = deliveryCost;
 
     res.json({
       success: true,
@@ -320,8 +318,6 @@ router.post("/calculate", async (req, res) => {
         timeframe: timeframe,
         baseCost: deliveryCost,
         finalCost: finalDeliveryCost,
-        isFreeDelivery: isFreeDelivery,
-        freeDeliveryThreshold: freeDeliveryThreshold,
         orderAmount: orderAmount,
         additionalInfo: {
           zone: delivery.deliveryZones,
