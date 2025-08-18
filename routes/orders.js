@@ -5,6 +5,7 @@ const Cart = require("../models/cart");
 const Product = require("../models/products");
 const PincodeDelivery = require("../models/pincodeDelivery");
 const User = require("../models/users");
+const { sendFetchOrderCommand } = require("../utils/websocket");
 
 // POST /api/orders/create - Create new order from cart
 router.post("/create", async (req, res) => {
@@ -95,6 +96,11 @@ router.post("/create", async (req, res) => {
 
     // Clear the cart after successful order creation
     await cart.clearCart();
+
+    // Send WebSocket command only if request is from chatbot (not frontend)
+    if (req.body.source !== "frontend") {
+      sendFetchOrderCommand(userId);
+    }
 
     // Update product stock
     for (const item of orderItems) {

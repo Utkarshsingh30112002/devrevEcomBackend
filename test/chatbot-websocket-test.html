@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot WebSocket Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .panel {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+      }
+      .connected {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .disconnected {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .message {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+      }
+      .command {
+        border-left: 4px solid #007bff;
+      }
+      .notification {
+        border-left: 4px solid #28a745;
+      }
+      .error {
+        border-left: 4px solid #dc3545;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .test-btn {
+        background-color: #007bff;
+        color: white;
+      }
+      .auth-btn {
+        background-color: #28a745;
+        color: white;
+      }
+      .clear-btn {
+        background-color: #dc3545;
+        color: white;
+      }
+      .cart-data,
+      .order-data {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🤖 Chatbot WebSocket Integration Test</h1>
+
+    <div class="container">
+      <!-- WebSocket Panel -->
+      <div class="panel">
+        <h2>WebSocket Connection</h2>
+        <div id="status" class="status disconnected">Disconnected</div>
+
+        <div>
+          <input
+            type="text"
+            id="userId"
+            placeholder="Enter User ID"
+            value="689c6211059e1500897bb3eb"
+            style="width: 200px; padding: 8px"
+          />
+          <button class="auth-btn" onclick="authenticate()">
+            Authenticate
+          </button>
+          <button class="clear-btn" onclick="clearMessages()">
+            Clear Messages
+          </button>
+        </div>
+
+        <h3>Received Messages:</h3>
+        <div id="messages"></div>
+      </div>
+
+      <!-- Frontend Simulation Panel -->
+      <div class="panel">
+        <h2>Frontend Simulation</h2>
+
+        <div>
+          <button class="test-btn" onclick="simulateCartAPI()">
+            Simulate Cart API Call
+          </button>
+          <button class="test-btn" onclick="simulateOrderAPI()">
+            Simulate Order API Call
+          </button>
+        </div>
+
+        <h3>Cart Data:</h3>
+        <div id="cartData" class="cart-data">
+          <p>No cart data loaded</p>
+        </div>
+
+        <h3>Order Data:</h3>
+        <div id="orderData" class="order-data">
+          <p>No order data loaded</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let ws;
+      const messagesDiv = document.getElementById("messages");
+      const statusDiv = document.getElementById("status");
+      const cartDataDiv = document.getElementById("cartData");
+      const orderDataDiv = document.getElementById("orderData");
+      let currentUserId = null;
+
+      function connect() {
+        // Connect to WebSocket server
+        ws = new WebSocket("ws://localhost:5000/");
+
+        ws.onopen = function () {
+          statusDiv.textContent = "Connected to WebSocket Server";
+          statusDiv.className = "status connected";
+          addMessage("System", "Connected to WebSocket server", "system");
+        };
+
+        ws.onmessage = function (event) {
+          const data = JSON.parse(event.data);
+          console.log("Received:", data);
+
+          if (data.type === "command") {
+            handleCommand(data);
+            addMessage(
+              "Command",
+              `${data.action}: ${JSON.stringify(data.data)}`,
+              "command"
+            );
+          } else if (data.type === "notification") {
+            handleNotification(data);
+            addMessage(
+              "Notification",
+              `${data.notification.title}: ${data.notification.message}`,
+              "notification"
+            );
+          } else if (data.type === "welcome") {
+            addMessage("System", data.message, "system");
+          } else if (data.type === "auth") {
+            addMessage("Auth", data.message, "system");
+          } else {
+            addMessage("Message", JSON.stringify(data), "message");
+          }
+        };
+
+        ws.onclose = function () {
+          statusDiv.textContent = "Disconnected from WebSocket Server";
+          statusDiv.className = "status disconnected";
+          addMessage("System", "Disconnected from WebSocket server", "system");
+        };
+
+        ws.onerror = function (error) {
+          addMessage("Error", "WebSocket error: " + error, "error");
+        };
+      }
+
+      function authenticate() {
+        const userId = document.getElementById("userId").value;
+        if (!userId) {
+          alert("Please enter a User ID");
+          return;
+        }
+
+        currentUserId = userId;
+        ws.send(
+          JSON.stringify({
+            type: "auth",
+            userId: userId,
+          })
+        );
+      }
+
+      function handleCommand(data) {
+        switch (data.action) {
+          case "fetch-cart":
+            console.log("🛒 Fetching cart data...");
+            fetchCartData();
+            break;
+          case "fetch-order":
+            console.log("📦 Fetching order data...");
+            fetchOrderData();
+            break;
+          case "refresh-ui":
+            console.log("🔄 Refreshing UI component:", data.data.component);
+            break;
+          default:
+            console.log("Unknown command:", data.action);
+        }
+      }
+
+      function handleNotification(data) {
+        // Show notification to user
+        console.log("🔔 Notification:", data.notification);
+
+        // You can integrate this with your notification system
+        if (data.notification.type === "success") {
+          // Show success notification
+          console.log("✅ Success:", data.notification.message);
+        } else if (data.notification.type === "info") {
+          // Show info notification
+          console.log("ℹ️ Info:", data.notification.message);
+        }
+      }
+
+      function addMessage(type, content, className) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${className}`;
+        messageDiv.innerHTML = `<strong>${type}:</strong> ${content}`;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      function clearMessages() {
+        messagesDiv.innerHTML = "";
+      }
+
+      // Simulate API calls that the chatbot would make
+      async function simulateCartAPI() {
+        if (!currentUserId) {
+          alert("Please authenticate first");
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/cart/${currentUserId}/add`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productId: "LAPTOP001",
+              quantity: 1,
+            }),
+          });
+          const result = await response.json();
+          addMessage(
+            "API Test",
+            "Cart add API called: " + result.message,
+            "api"
+          );
+        } catch (error) {
+          addMessage(
+            "API Error",
+            "Failed to call cart API: " + error.message,
+            "error"
+          );
+        }
+      }
+
+      async function simulateOrderAPI() {
+        if (!currentUserId) {
+          alert("Please authenticate first");
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/orders/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: currentUserId,
+              deliveryAddressIndex: 0,
+              deliveryType: "standard",
+              paymentMethod: "cod",
+            }),
+          });
+          const result = await response.json();
+          addMessage(
+            "API Test",
+            "Order create API called: " + result.message,
+            "api"
+          );
+        } catch (error) {
+          addMessage(
+            "API Error",
+            "Failed to call order API: " + error.message,
+            "error"
+          );
+        }
+      }
+
+      // Functions to fetch data when WebSocket commands are received
+      async function fetchCartData() {
+        if (!currentUserId) return;
+
+        try {
+          const response = await fetch(`/api/cart/${currentUserId}`);
+          const result = await response.json();
+
+          if (result.success) {
+            cartDataDiv.innerHTML = `
+                        <h4>Cart Items: ${result.data.itemCount}</h4>
+                        <p>Total Amount: ₹${result.data.totalAmount}</p>
+                        <p>Total Items: ${result.data.totalItems}</p>
+                        <ul>
+                            ${result.data.items
+                              .map(
+                                (item) =>
+                                  `<li>${item.name} - ₹${item.price} x ${item.quantity}</li>`
+                              )
+                              .join("")}
+                        </ul>
+                    `;
+          } else {
+            cartDataDiv.innerHTML = "<p>Failed to load cart data</p>";
+          }
+        } catch (error) {
+          cartDataDiv.innerHTML = "<p>Error loading cart data</p>";
+        }
+      }
+
+      async function fetchOrderData() {
+        if (!currentUserId) return;
+
+        try {
+          const response = await fetch(`/api/orders/user/${currentUserId}`);
+          const result = await response.json();
+
+          if (result.success) {
+            orderDataDiv.innerHTML = `
+                        <h4>Orders: ${result.data.orders.length}</h4>
+                        <ul>
+                            ${result.data.orders
+                              .map(
+                                (order) =>
+                                  `<li>${order.orderId} - ₹${order.totalAmount} - ${order.orderStatus}</li>`
+                              )
+                              .join("")}
+                        </ul>
+                    `;
+          } else {
+            orderDataDiv.innerHTML = "<p>Failed to load order data</p>";
+          }
+        } catch (error) {
+          orderDataDiv.innerHTML = "<p>Error loading order data</p>";
+        }
+      }
+
+      // Connect when page loads
+      connect();
+    </script>
+  </body>
+</html>

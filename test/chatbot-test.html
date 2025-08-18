@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot WebSocket Test</title>
+    <style>
+      body {
+        font-family: Arial;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+      }
+      .connected {
+        background-color: #d4edda;
+      }
+      .disconnected {
+        background-color: #f8d7da;
+      }
+      .message {
+        background-color: #f8f9fa;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+      }
+      .command {
+        border-left: 4px solid #007bff;
+      }
+      .notification {
+        border-left: 4px solid #28a745;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .test-btn {
+        background-color: #007bff;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🤖 Chatbot WebSocket Test</h1>
+
+    <div id="status" class="status disconnected">Disconnected</div>
+
+    <div>
+      <input
+        type="text"
+        id="userId"
+        placeholder="User ID"
+        value="689c6211059e1500897bb3eb"
+      />
+      <button onclick="authenticate()">Authenticate</button>
+      <button class="test-btn" onclick="testCartAPI()">Test Cart API</button>
+      <button class="test-btn" onclick="testOrderAPI()">Test Order API</button>
+    </div>
+
+    <h3>WebSocket Messages:</h3>
+    <div id="messages"></div>
+
+    <script>
+      let ws;
+      let currentUserId = null;
+
+      function connect() {
+        ws = new WebSocket("ws://localhost:5000/");
+
+        ws.onopen = () => {
+          document.getElementById("status").textContent = "Connected";
+          document.getElementById("status").className = "status connected";
+          addMessage("System", "Connected to WebSocket");
+        };
+
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          console.log("Received:", data);
+
+          if (data.type === "command") {
+            addMessage(
+              "Command",
+              `${data.action}: ${JSON.stringify(data.data)}`,
+              "command"
+            );
+            handleCommand(data);
+          } else if (data.type === "notification") {
+            addMessage(
+              "Notification",
+              `${data.notification.title}: ${data.notification.message}`,
+              "notification"
+            );
+          }
+        };
+
+        ws.onclose = () => {
+          document.getElementById("status").textContent = "Disconnected";
+          document.getElementById("status").className = "status disconnected";
+        };
+      }
+
+      function authenticate() {
+        const userId = document.getElementById("userId").value;
+        currentUserId = userId;
+        ws.send(JSON.stringify({ type: "auth", userId: userId }));
+      }
+
+      function handleCommand(data) {
+        switch (data.action) {
+          case "fetch-cart":
+            console.log("🛒 Fetching cart...");
+            fetchCartData();
+            break;
+          case "fetch-order":
+            console.log("📦 Fetching orders...");
+            fetchOrderData();
+            break;
+        }
+      }
+
+      function addMessage(type, content, className = "") {
+        const div = document.createElement("div");
+        div.className = `message ${className}`;
+        div.innerHTML = `<strong>${type}:</strong> ${content}`;
+        document.getElementById("messages").appendChild(div);
+      }
+
+      async function testCartAPI() {
+        if (!currentUserId) {
+          alert("Please authenticate first");
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/cart/${currentUserId}/add`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productId: "LAPTOP001",
+              quantity: 1,
+            }),
+          });
+          const result = await response.json();
+          addMessage("API Test", "Cart API called: " + result.message);
+        } catch (error) {
+          addMessage("API Error", "Failed: " + error.message);
+        }
+      }
+
+      async function testOrderAPI() {
+        if (!currentUserId) {
+          alert("Please authenticate first");
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/orders/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: currentUserId,
+              deliveryAddressIndex: 0,
+              deliveryType: "standard",
+              paymentMethod: "cod",
+            }),
+          });
+          const result = await response.json();
+          addMessage("API Test", "Order API called: " + result.message);
+        } catch (error) {
+          addMessage("API Error", "Failed: " + error.message);
+        }
+      }
+
+      async function fetchCartData() {
+        try {
+          const response = await fetch(`/api/cart/${currentUserId}`);
+          const result = await response.json();
+          addMessage(
+            "Cart Data",
+            `Items: ${result.data.itemCount}, Total: ₹${result.data.totalAmount}`
+          );
+        } catch (error) {
+          addMessage("Error", "Failed to fetch cart");
+        }
+      }
+
+      async function fetchOrderData() {
+        try {
+          const response = await fetch(`/api/orders/user/${currentUserId}`);
+          const result = await response.json();
+          addMessage("Order Data", `Orders: ${result.data.orders.length}`);
+        } catch (error) {
+          addMessage("Error", "Failed to fetch orders");
+        }
+      }
+
+      connect();
+    </script>
+  </body>
+</html>

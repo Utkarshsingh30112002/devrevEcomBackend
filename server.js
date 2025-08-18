@@ -2,10 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const http = require("http");
+const WebSocket = require("ws");
 require("dotenv").config();
 
 const connectDB = require("./config/database");
 const { verifyConnection } = require("./config/email");
+const { initializeWebSocket } = require("./utils/websocket");
 
 // Import routes
 const productRoutes = require("./routes/products");
@@ -20,6 +23,15 @@ const paymentRoutes = require("./routes/payments");
 const otpRoutes = require("./routes/otp");
 
 const app = express();
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// Create WebSocket server
+const wss = new WebSocket.Server({ server });
+
+// Initialize WebSocket utilities
+initializeWebSocket(wss);
 
 // Connect to MongoDB
 connectDB();
@@ -61,6 +73,83 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to Ecommerce API" });
 });
 
+// WebSocket connection handling
+wss.on("connection", (ws, req) => {
+  console.log("New WebSocket connection established");
+
+  // Handle incoming messages
+  ws.on("message", (message) => {
+    try {
+      const data = JSON.parse(message);
+      console.log("Received WebSocket message:", data);
+
+      // Handle different message types
+      switch (data.type) {
+        case "auth":
+          // Store user ID with connection
+          ws.userId = data.userId;
+          console.log(`User ${data.userId} authenticated for WebSocket`);
+          ws.send(
+            JSON.stringify({
+              type: "auth",
+              status: "success",
+              message: "WebSocket authenticated",
+            })
+          );
+          break;
+
+        case "ping":
+          ws.send(
+            JSON.stringify({
+              type: "pong",
+              timestamp: Date.now(),
+            })
+          );
+          break;
+
+        default:
+          ws.send(
+            JSON.stringify({
+              type: "error",
+              message: "Unknown message type",
+            })
+          );
+      }
+    } catch (error) {
+      console.error("WebSocket message error:", error);
+      ws.send(
+        JSON.stringify({
+          type: "error",
+          message: "Invalid JSON format",
+        })
+      );
+    }
+  });
+
+  // Handle client disconnect
+  ws.on("close", () => {
+    console.log("WebSocket connection closed");
+  });
+
+  // Send welcome message
+  ws.send(
+    JSON.stringify({
+      type: "welcome",
+      message: "Connected to Ecommerce WebSocket Server",
+      timestamp: Date.now(),
+    })
+  );
+});
+
+// WebSocket status endpoint
+app.get("/ws-status", (req, res) => {
+  res.json({
+    message: "WebSocket server is running",
+    connections: wss.clients.size,
+    uptime: process.uptime(),
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -74,6 +163,8 @@ app.use("*", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, "0.0.0.0", () => {
+// Use server.listen instead of app.listen
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`WebSocket server is ready for connections`);
 });

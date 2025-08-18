@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Cart = require("../models/cart");
 const Product = require("../models/products");
+const { sendFetchCartCommand } = require("../utils/websocket");
 
 // Helper function to get short description
 function getShortDescription(productName, type) {
@@ -106,7 +107,7 @@ router.post("/:userId/add", async (req, res) => {
         message: `Only ${product.stock} items available in stock`,
       });
     }
-
+    userId;
     // Get or create cart
     let cart = await Cart.findOne({ userId: userId, isActive: true });
 
@@ -127,6 +128,11 @@ router.post("/:userId/add", async (req, res) => {
 
     // Add item to cart
     await cart.addItem(productData, quantity);
+
+    // Send WebSocket command only if request is from chatbot (not frontend)
+    if (req.body.source !== "frontend") {
+      sendFetchCartCommand(userId);
+    }
 
     res.json({
       success: true,
@@ -190,6 +196,11 @@ router.put("/:userId/update", async (req, res) => {
 
     await cart.updateQuantity(productId, quantity);
 
+    // Send WebSocket command only if request is from chatbot (not frontend)
+    if (req.body.source !== "frontend") {
+      sendFetchCartCommand(userId);
+    }
+
     res.json({
       success: true,
       message: "Cart updated successfully",
@@ -226,6 +237,11 @@ router.delete("/:userId/remove/:productId", async (req, res) => {
 
     await cart.removeItem(productId);
 
+    // Send WebSocket command only if request is from chatbot (not frontend)
+    if (req.body.source !== "frontend") {
+      sendFetchCartCommand(userId);
+    }
+
     res.json({
       success: true,
       message: "Item removed from cart successfully",
@@ -261,6 +277,11 @@ router.delete("/:userId/clear", async (req, res) => {
     }
 
     await cart.clearCart();
+
+    // Send WebSocket command only if request is from chatbot (not frontend)
+    if (req.body.source !== "frontend") {
+      sendFetchCartCommand(userId);
+    }
 
     res.json({
       success: true,
