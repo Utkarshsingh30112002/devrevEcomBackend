@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
         price: 1,
         stock: 1,
         specs: 1,
-        _id: 0, // Exclude MongoDB _id
+        _id: 1, // Include MongoDB _id for deeplink
       }
     ).sort({ productId: 1 });
 
@@ -39,6 +39,7 @@ router.get("/", async (req, res) => {
       short_description: getShortDescription(product.name, type),
       stock: product.stock,
       specs: product.specs,
+      deeplink: `http://13.233.107.200/product/${product._id}`,
     }));
 
     res.json({
@@ -100,7 +101,7 @@ router.get("/check/:productId", async (req, res) => {
         stock: 1,
         category: 1,
         specs: 1,
-        _id: 0,
+        _id: 1, // Include MongoDB _id for deeplink
       }
     );
 
@@ -123,6 +124,7 @@ router.get("/check/:productId", async (req, res) => {
         stock: product.stock,
         type: type,
         specs: product.specs,
+        deeplink: `http://13.233.107.200/product/${product._id}`,
       },
     });
   } catch (error) {
@@ -153,7 +155,7 @@ router.get("/low", async (req, res) => {
       stock: 1,
       category: 1,
       specs: 1,
-      _id: 0,
+      _id: 1, // Include MongoDB _id for deeplink
     }).sort({ stock: 1 });
 
     const stockData = products.map((product) => {
@@ -166,6 +168,7 @@ router.get("/low", async (req, res) => {
         stock: product.stock,
         type: type,
         specs: product.specs,
+        deeplink: `http://13.233.107.200/product/${product._id}`,
       };
     });
 

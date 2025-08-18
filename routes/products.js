@@ -31,7 +31,14 @@ router.get("/", async (req, res) => {
     }
 
     const products = await Product.find(filter).sort({ createdAt: -1 });
-    res.json(products);
+
+    // Add deeplink URLs to each product
+    const productsWithDeeplinks = products.map((product) => ({
+      ...product.toObject(),
+      deeplink: `http://13.233.107.200/product/${product._id}`,
+    }));
+
+    res.json(productsWithDeeplinks);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -44,7 +51,14 @@ router.get("/:id", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.json(product);
+
+    // Add deeplink URL to the product
+    const productWithDeeplink = {
+      ...product.toObject(),
+      deeplink: `http://13.233.107.200/product/${product._id}`,
+    };
+
+    res.json(productWithDeeplink);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -57,7 +71,14 @@ router.get("/productId/:productId", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.json(product);
+
+    // Add deeplink URL to the product
+    const productWithDeeplink = {
+      ...product.toObject(),
+      deeplink: `http://13.233.107.200/product/${product._id}`,
+    };
+
+    res.json(productWithDeeplink);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -84,7 +105,14 @@ router.put("/:id", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.json(product);
+
+    // Add deeplink URL to the updated product
+    const productWithDeeplink = {
+      ...product.toObject(),
+      deeplink: `http://13.233.107.200/product/${product._id}`,
+    };
+
+    res.json(productWithDeeplink);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -115,7 +143,14 @@ router.patch("/:id/stock", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.json(product);
+
+    // Add deeplink URL to the product with updated stock
+    const productWithDeeplink = {
+      ...product.toObject(),
+      deeplink: `http://13.233.107.200/product/${product._id}`,
+    };
+
+    res.json(productWithDeeplink);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
