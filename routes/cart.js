@@ -3,6 +3,7 @@ const router = express.Router();
 const Cart = require("../models/cart");
 const Product = require("../models/products");
 const { sendFetchCartCommand } = require("../utils/websocket");
+const { authenticateMultiRequired } = require("../middleware/multiAuth");
 
 // Helper function to get short description
 function getShortDescription(productName, type) {
@@ -34,10 +35,10 @@ function getShortDescription(productName, type) {
   );
 }
 
-// GET /api/cart/:userId - Get user's cart
-router.get("/:userId", async (req, res) => {
+// GET /api/cart/me - Get my cart
+router.get("/me", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
 
     let cart = await Cart.findOne({ userId: userId, isActive: true });
 
@@ -50,7 +51,7 @@ router.get("/:userId", async (req, res) => {
     res.json({
       success: true,
       data: {
-        userId: cart.userId,
+        user_uuid: req.auth.user_uuid,
         items: cart.items,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
@@ -66,10 +67,10 @@ router.get("/:userId", async (req, res) => {
   }
 });
 
-// POST /api/cart/:userId/add - Add item to cart
-router.post("/:userId/add", async (req, res) => {
+// POST /api/cart/me/add - Add item to cart
+router.post("/me/add", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
     const { productId, quantity = 1 } = req.body;
 
     if (!productId) {
@@ -138,7 +139,7 @@ router.post("/:userId/add", async (req, res) => {
       success: true,
       message: "Item added to cart successfully",
       data: {
-        userId: cart.userId,
+        user_uuid: req.auth.user_uuid,
         items: cart.items,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
@@ -154,10 +155,10 @@ router.post("/:userId/add", async (req, res) => {
   }
 });
 
-// PUT /api/cart/:userId/update - Update item quantity
-router.put("/:userId/update", async (req, res) => {
+// PUT /api/cart/me/update - Update item quantity
+router.put("/me/update", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
     const { productId, quantity } = req.body;
 
     if (!productId || quantity === undefined) {
@@ -205,7 +206,7 @@ router.put("/:userId/update", async (req, res) => {
       success: true,
       message: "Cart updated successfully",
       data: {
-        userId: cart.userId,
+        user_uuid: req.auth.user_uuid,
         items: cart.items,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
@@ -221,10 +222,11 @@ router.put("/:userId/update", async (req, res) => {
   }
 });
 
-// DELETE /api/cart/:userId/remove/:productId - Remove item from cart
-router.delete("/:userId/remove/:productId", async (req, res) => {
+// DELETE /api/cart/me/remove/:productId - Remove item from cart
+router.delete("/me/remove/:productId", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId, productId } = req.params;
+    const { productId } = req.params;
+    const userId = req.auth?.sub;
 
     const cart = await Cart.findOne({ userId: userId, isActive: true });
 
@@ -246,7 +248,7 @@ router.delete("/:userId/remove/:productId", async (req, res) => {
       success: true,
       message: "Item removed from cart successfully",
       data: {
-        userId: cart.userId,
+        user_uuid: req.auth.user_uuid,
         items: cart.items,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
@@ -262,10 +264,10 @@ router.delete("/:userId/remove/:productId", async (req, res) => {
   }
 });
 
-// DELETE /api/cart/:userId/clear - Clear entire cart
-router.delete("/:userId/clear", async (req, res) => {
+// DELETE /api/cart/me/clear - Clear entire cart
+router.delete("/me/clear", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
 
     const cart = await Cart.findOne({ userId: userId, isActive: true });
 
@@ -287,7 +289,7 @@ router.delete("/:userId/clear", async (req, res) => {
       success: true,
       message: "Cart cleared successfully",
       data: {
-        userId: cart.userId,
+        user_uuid: req.auth.user_uuid,
         items: cart.items,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
@@ -303,10 +305,10 @@ router.delete("/:userId/clear", async (req, res) => {
   }
 });
 
-// GET /api/cart/:userId/count - Get cart item count
-router.get("/:userId/count", async (req, res) => {
+// GET /api/cart/me/count - Get cart item count
+router.get("/me/count", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
 
     const cart = await Cart.findOne({ userId: userId, isActive: true });
 

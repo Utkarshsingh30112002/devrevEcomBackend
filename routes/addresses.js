@@ -1,6 +1,193 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/users");
+const { authenticateMultiRequired } = require("../middleware/multiAuth");
+
+// ME variants using auth (prefer req.auth.user_uuid)
+
+// GET /api/addresses/me - Get all addresses for authenticated user
+router.get("/me", authenticateMultiRequired, async (req, res) => {
+  try {
+    const authSub = req.auth?.sub;
+    const user = await User.findById(authSub).select("addresses");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    return res.json({
+      success: true,
+      data: {
+        user_uuid: req.auth.user_uuid,
+        addresses: user.addresses || [],
+        count: user.addresses ? user.addresses.length : 0,
+      },
+    });
+  } catch (error) {
+    console.error("Get addresses (me) error:", error);
+    return res.status(500).json({ success: false, message: "Error fetching addresses" });
+  }
+});
+
+// POST /api/addresses/me - Add new address
+router.post("/me", authenticateMultiRequired, async (req, res) => {
+  try {
+    const authSub = req.auth?.sub;
+    const { street, area, city, state, pincode, country = "India", isDefault = false, addressType = "home" } = req.body;
+
+    if (!street || !area || !city || !state || !pincode) {
+      return res.status(400).json({ success: false, message: "Street, area, city, state, and pincode are required" });
+    }
+
+    const user = await User.findById(authSub);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if (!user.addresses) user.addresses = [];
+
+    if (user.addresses.length === 0 || isDefault) {
+      user.addresses.forEach((addr) => {
+        addr.isDefault = false;
+      });
+    }
+
+    const newAddress = { street, area, city, state, pincode, country, isDefault: user.addresses.length === 0 || isDefault, addressType };
+
+    user.addresses.push(newAddress);
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: "Address added successfully",
+      data: { user_uuid: req.auth.user_uuid, address: newAddress, totalAddresses: user.addresses.length },
+    });
+  } catch (error) {
+    console.error("Add address (me) error:", error);
+    return res.status(500).json({ success: false, message: "Error adding address" });
+  }
+});
+
+// PUT /api/addresses/me/:addressIndex - Update address
+router.put("/me/:addressIndex", authenticateMultiRequired, async (req, res) => {
+  try {
+    const authSub = req.auth?.sub;
+    const { addressIndex } = req.params;
+    const { street, area, city, state, pincode, country, isDefault, addressType } = req.body;
+
+    const user = await User.findById(authSub);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    if (!user.addresses || addressIndex >= user.addresses.length) {
+      return res.status(404).json({ success: false, message: "Address not found" });
+    }
+
+    if (street) user.addresses[addressIndex].street = street;
+    if (area) user.addresses[addressIndex].area = area;
+    if (city) user.addresses[addressIndex].city = city;
+    if (state) user.addresses[addressIndex].state = state;
+    if (pincode) user.addresses[addressIndex].pincode = pincode;
+    if (country) user.addresses[addressIndex].country = country;
+    if (addressType) user.addresses[addressIndex].addressType = addressType;
+
+    if (isDefault !== undefined) {
+      if (isDefault) {
+        user.addresses.forEach((addr, index) => {
+          addr.isDefault = index === parseInt(addressIndex);
+        });
+      } else {
+        user.addresses[addressIndex].isDefault = false;
+      }
+    }
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: "Address updated successfully",
+      data: { user_uuid: req.auth.user_uuid, address: user.addresses[addressIndex], totalAddresses: user.addresses.length },
+    });
+  } catch (error) {
+    console.error("Update address (me) error:", error);
+    return res.status(500).json({ success: false, message: "Error updating address" });
+  }
+});
+
+// DELETE /api/addresses/me/:addressIndex - Delete address
+router.delete("/me/:addressIndex", authenticateMultiRequired, async (req, res) => {
+  try {
+    const authSub = req.auth?.sub;
+    const { addressIndex } = req.params;
+    const user = await User.findById(authSub);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    if (!user.addresses || addressIndex >= user.addresses.length) {
+      return res.status(404).json({ success: false, message: "Address not found" });
+    }
+    const deletedAddress = user.addresses[addressIndex];
+    const wasDefault = deletedAddress.isDefault;
+    user.addresses.splice(addressIndex, 1);
+    if (wasDefault && user.addresses.length > 0) {
+      user.addresses[0].isDefault = true;
+    }
+    await user.save();
+    return res.json({
+      success: true,
+      message: "Address deleted successfully",
+      data: { user_uuid: req.auth.user_uuid, deletedAddress, totalAddresses: user.addresses.length },
+    });
+  } catch (error) {
+    console.error("Delete address (me) error:", error);
+    return res.status(500).json({ success: false, message: "Error deleting address" });
+  }
+});
+
+// PUT /api/addresses/me/:addressIndex/default - Set default address
+router.put("/me/:addressIndex/default", authenticateMultiRequired, async (req, res) => {
+  try {
+    const authSub = req.auth?.sub;
+    const { addressIndex } = req.params;
+    const user = await User.findById(authSub);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    if (!user.addresses || addressIndex >= user.addresses.length) {
+      return res.status(404).json({ success: false, message: "Address not found" });
+    }
+    user.addresses.forEach((addr) => {
+      addr.isDefault = false;
+    });
+    user.addresses[addressIndex].isDefault = true;
+    await user.save();
+    return res.json({
+      success: true,
+      message: "Default address updated successfully",
+      data: { user_uuid: req.auth.user_uuid, defaultAddress: user.addresses[addressIndex], totalAddresses: user.addresses.length },
+    });
+  } catch (error) {
+    console.error("Set default address (me) error:", error);
+    return res.status(500).json({ success: false, message: "Error setting default address" });
+  }
+});
+
+// GET /api/addresses/me/default - Get default address
+router.get("/me/default", authenticateMultiRequired, async (req, res) => {
+  try {
+    const authSub = req.auth?.sub;
+    const user = await User.findById(authSub).select("addresses");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    if (!user.addresses || user.addresses.length === 0) {
+      return res.status(404).json({ success: false, message: "No addresses found" });
+    }
+    const defaultAddress = user.addresses.find((addr) => addr.isDefault) || user.addresses[0];
+    return res.json({ success: true, data: { user_uuid: req.auth.user_uuid, defaultAddress } });
+  } catch (error) {
+    console.error("Get default address (me) error:", error);
+    return res.status(500).json({ success: false, message: "Error fetching default address" });
+  }
+});
 
 // GET /api/addresses/:userId - Get all addresses for a user
 router.get("/:userId", async (req, res) => {

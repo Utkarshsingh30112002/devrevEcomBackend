@@ -10,6 +10,7 @@ const dummyUsers = [
     password: "hashedPassword123", // In real app, this would be properly hashed
     firstName: "John",
     lastName: "Doe",
+    user_uuid: "3f0f1a6e-9f1b-4a0a-93b1-2c0c08d8a111",
     phone: "+91-9876543210",
     addresses: [
       {
@@ -44,6 +45,7 @@ const dummyUsers = [
     password: "hashedPassword456",
     firstName: "Jane",
     lastName: "Smith",
+    user_uuid: "7c2f8b90-4d5e-4f1e-9d2a-1a2b3c4d5e66",
     phone: "+91-9876543211",
     addresses: [
       {
@@ -68,6 +70,7 @@ const dummyUsers = [
     password: "hashedPassword789",
     firstName: "Mike",
     lastName: "Wilson",
+    user_uuid: "d9a0c123-6b7c-4f2e-8a9b-0c1d2e3f4a55",
     phone: "+91-9876543212",
     addresses: [
       {
@@ -92,6 +95,7 @@ const dummyUsers = [
     password: "hashedPassword101",
     firstName: "Sarah",
     lastName: "Jones",
+    user_uuid: "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c77",
     phone: "+91-9876543213",
     addresses: [
       {
@@ -116,6 +120,7 @@ const dummyUsers = [
     password: "hashedAdminPassword",
     firstName: "Admin",
     lastName: "User",
+    user_uuid: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c99",
     phone: "+91-9876543214",
     addresses: [
       {
@@ -140,6 +145,7 @@ const dummyUsers = [
     password: "hashedPassword202",
     firstName: "Alex",
     lastName: "Chen",
+    user_uuid: "f0e1d2c3-b4a5-4c6d-8e9f-001122334455",
     phone: "+91-9876543215",
     addresses: [
       {
@@ -164,6 +170,7 @@ const dummyUsers = [
     password: "hashedPassword303",
     firstName: "David",
     lastName: "Kumar",
+    user_uuid: "123e4567-e89b-12d3-a456-426614174000",
     phone: "+91-9876543216",
     addresses: [
       {
@@ -188,6 +195,7 @@ const dummyUsers = [
     password: "hashedPassword404",
     firstName: "Priya",
     lastName: "Sharma",
+    user_uuid: "987e6543-e21b-45d3-b456-123456789abc",
     phone: "+91-9876543217",
     addresses: [
       {

@@ -9,6 +9,11 @@ const orderItemSchema = new mongoose.Schema(
     imageUrl: { type: String, required: true, trim: true },
     type: { type: String, required: true, enum: ["mice", "laptop"] },
     totalPrice: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: ["active", "cancelled", "returned", "exchanged"],
+      default: "active",
+    },
   },
   { _id: false }
 );
@@ -88,6 +93,7 @@ const orderSchema = new mongoose.Schema(
       ],
       default: "pending",
     },
+    deliveredAt: { type: Date },
     subtotal: { type: Number, required: true },
     deliveryCost: { type: Number, required: true, default: 0 },
     tax: { type: Number, required: true, default: 0 },
@@ -95,6 +101,52 @@ const orderSchema = new mongoose.Schema(
     totalAmount: { type: Number, required: true },
     notes: { type: String, trim: true },
     isActive: { type: Boolean, default: true },
+    returnRequests: [
+      new mongoose.Schema(
+        {
+          requestId: { type: String, required: true, trim: true },
+          reason: { type: String, trim: true },
+          status: {
+            type: String,
+            enum: [
+              "requested",
+              "approved",
+              "rejected",
+              "picked_up",
+              "completed",
+              "cancelled",
+            ],
+            default: "requested",
+          },
+          pickupDate: { type: Date },
+          requestedAt: { type: Date, default: Date.now },
+        },
+        { _id: false }
+      ),
+    ],
+    exchangeRequests: [
+      new mongoose.Schema(
+        {
+          requestId: { type: String, required: true, trim: true },
+          reason: { type: String, trim: true },
+          status: {
+            type: String,
+            enum: [
+              "requested",
+              "approved",
+              "rejected",
+              "picked_up",
+              "completed",
+              "cancelled",
+            ],
+            default: "requested",
+          },
+          pickupDate: { type: Date },
+          requestedAt: { type: Date, default: Date.now },
+        },
+        { _id: false }
+      ),
+    ],
   },
   { timestamps: true }
 );
@@ -142,7 +194,9 @@ orderSchema.virtual("isPaid").get(function () {
 
 // Method to calculate totals
 orderSchema.methods.calculateTotals = function () {
-  this.subtotal = this.items.reduce((sum, item) => sum + item.totalPrice, 0);
+  this.subtotal = this.items
+    .filter((item) => item.status === "active")
+    .reduce((sum, item) => sum + item.totalPrice, 0);
   this.tax = 0; // No tax applied
   this.totalAmount =
     this.subtotal + this.deliveryCost + this.tax - this.discount;
@@ -158,6 +212,9 @@ orderSchema.methods.updateStatus = function (newStatus) {
     this.deliveryDetails.deliveryStatus = "shipped";
   } else if (newStatus === "delivered") {
     this.deliveryDetails.deliveryStatus = "delivered";
+    if (!this.deliveredAt) {
+      this.deliveredAt = new Date();
+    }
   }
 
   return this.save();
@@ -173,6 +230,38 @@ orderSchema.methods.updatePaymentStatus = function (
     this.paymentDetails.transactionId = transactionId;
   }
   return this.save();
+};
+
+// Method: within 3-day return window from deliveredAt
+orderSchema.methods.isWithinReturnWindow = function () {
+  if (!this.deliveredAt) return false;
+  const now = Date.now();
+  const delivered = new Date(this.deliveredAt).getTime();
+  const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
+  return now - delivered <= threeDaysMs;
+};
+
+// Helper to generate a simple request ID
+function generateRequestId(prefix) {
+  const ts = Date.now().toString().slice(-8);
+  const rand = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
+  return `${prefix}${ts}${rand}`;
+}
+
+// Add a return request
+orderSchema.methods.addReturnRequest = function (itemIds, reason, pickupDate) {
+  const requestId = generateRequestId("RET");
+  this.returnRequests.push({ requestId, reason, pickupDate, itemIds });
+  return this.save().then(() => ({ requestId }));
+};
+
+// Add an exchange request
+orderSchema.methods.addExchangeRequest = function (itemIds, reason, pickupDate) {
+  const requestId = generateRequestId("EXC");
+  this.exchangeRequests.push({ requestId, reason, pickupDate, itemIds });
+  return this.save().then(() => ({ requestId }));
 };
 
 // Method to add tracking number

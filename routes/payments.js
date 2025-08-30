@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const { UserPayment, Transaction } = require("../models/payments");
+const { authenticateMultiRequired } = require("../middleware/multiAuth");
 const Order = require("../models/orders");
 const OTP = require("../models/otp");
 const { transporter } = require("../config/email");
 
 // GET /api/payments/saved-cards/:userId - Get user's saved cards
-router.get("/saved-cards/:userId", async (req, res) => {
+router.get("/saved-cards/me", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
-
+    const userId = req.auth?.sub;
     let userPayment = await UserPayment.findByUserId(userId);
 
     if (!userPayment) {
@@ -34,7 +34,7 @@ router.get("/saved-cards/:userId", async (req, res) => {
     res.json({
       success: true,
       data: {
-        userId: userId,
+        user_uuid: req.auth.user_uuid,
         savedCards: maskedCards,
         count: maskedCards.length,
         hasDefaultCard: maskedCards.some((card) => card.isDefault),
@@ -50,9 +50,9 @@ router.get("/saved-cards/:userId", async (req, res) => {
 });
 
 // POST /api/payments/saved-cards/:userId - Add new saved card
-router.post("/saved-cards/:userId", async (req, res) => {
+router.post("/saved-cards/me", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
     const {
       cardNumber,
       cardType,
@@ -121,7 +121,7 @@ router.post("/saved-cards/:userId", async (req, res) => {
       success: true,
       message: "Card saved successfully",
       data: {
-        userId: userId,
+        user_uuid: req.auth.user_uuid,
         card: {
           cardNumber: cardData.cardNumber.replace(
             /\d{4}-\d{4}-\d{4}-(\d{4})/,
@@ -148,9 +148,9 @@ router.post("/saved-cards/:userId", async (req, res) => {
 });
 
 // PUT /api/payments/saved-cards/:userId/default - Set default card
-router.put("/saved-cards/:userId/default", async (req, res) => {
+router.put("/saved-cards/me/default", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
     const { cardNumber } = req.body;
 
     if (!cardNumber) {
@@ -174,7 +174,7 @@ router.put("/saved-cards/:userId/default", async (req, res) => {
       success: true,
       message: "Default card updated successfully",
       data: {
-        userId: userId,
+        user_uuid: req.auth.user_uuid,
         defaultCard: userPayment.getDefaultCard()?.maskedCardNumber,
       },
     });
@@ -188,9 +188,10 @@ router.put("/saved-cards/:userId/default", async (req, res) => {
 });
 
 // DELETE /api/payments/saved-cards/:userId/:cardNumber - Remove saved card
-router.delete("/saved-cards/:userId/:cardNumber", async (req, res) => {
+router.delete("/saved-cards/me/:cardNumber", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId, cardNumber } = req.params;
+    const { cardNumber } = req.params;
+    const userId = req.auth?.sub;
 
     const userPayment = await UserPayment.findByUserId(userId);
     if (!userPayment) {
@@ -206,7 +207,7 @@ router.delete("/saved-cards/:userId/:cardNumber", async (req, res) => {
       success: true,
       message: "Card removed successfully",
       data: {
-        userId: userId,
+        user_uuid: req.auth.user_uuid,
         remainingCards: userPayment.savedCards.filter((card) => card.isActive)
           .length,
       },
@@ -283,11 +284,10 @@ router.post("/send-otp", async (req, res) => {
 });
 
 // POST /api/payments/process - Process payment
-router.post("/process", async (req, res) => {
+router.post("/process", authenticateMultiRequired, async (req, res) => {
   try {
     const {
       orderId,
-      userId,
       amount,
       paymentMethod,
       cardNumber,
@@ -302,10 +302,11 @@ router.post("/process", async (req, res) => {
       userEmail, // Add userEmail for OTP verification
     } = req.body;
 
-    if (!orderId || !userId || !amount || !paymentMethod) {
+    const authSub = req.auth?.sub;
+    if (!orderId || !authSub || !amount || !paymentMethod) {
       return res.status(400).json({
         success: false,
-        message: "Order ID, user ID, amount, and payment method are required",
+        message: "Order ID, amount, payment method, and auth are required",
       });
     }
 
@@ -344,7 +345,7 @@ router.post("/process", async (req, res) => {
     // Process payment
     const paymentData = {
       orderId,
-      userId,
+      userId: authSub,
       amount,
       paymentMethod,
       cardNumber,
@@ -407,10 +408,10 @@ router.post("/process", async (req, res) => {
   }
 });
 
-// GET /api/payments/transactions/:userId - Get user's transaction history
-router.get("/transactions/:userId", async (req, res) => {
+// GET /api/payments/transactions/me - Get my transaction history
+router.get("/transactions/me", authenticateMultiRequired, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.auth?.sub;
     const { page = 1, limit = 10, status } = req.query;
 
     let query = { userId: userId };
@@ -458,6 +459,7 @@ router.get("/transactions/:userId", async (req, res) => {
     res.json({
       success: true,
       data: {
+        user_uuid: req.auth.user_uuid,
         transactions: maskedTransactions,
         pagination: {
           page: parseInt(page),
@@ -589,6 +591,38 @@ router.post("/refund/:transactionId", async (req, res) => {
       success: false,
       message: "Error processing refund",
     });
+  }
+});
+
+// GET /api/payments/refunds/:orderId - Track refund status for an order
+router.get("/refunds/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const txns = await Transaction.find({ orderId }).sort({ createdAt: -1 });
+    if (!txns || txns.length === 0) {
+      return res.status(404).json({ success: false, message: "No transactions for this order" });
+    }
+    // Find latest refunded or the most recent payment
+    const refunded = txns.find((t) => t.paymentStatus === "refunded");
+    const latest = txns[0];
+    return res.json({
+      success: true,
+      data: {
+        orderId,
+        refundStatus: refunded ? "refunded" : latest.paymentStatus,
+        expectedCreditDate: refunded ? refunded.refundDetails?.refundDate : undefined,
+        transactions: txns.map((t) => ({
+          transactionId: t.transactionId,
+          paymentStatus: t.paymentStatus,
+          amount: t.amount,
+          refundDetails: t.refundDetails,
+          createdAt: t.createdAt,
+        })),
+      },
+    });
+  } catch (error) {
+    console.error("Track refund status error:", error);
+    return res.status(500).json({ success: false, message: "Error fetching refund status" });
   }
 });
 

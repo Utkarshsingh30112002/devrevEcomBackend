@@ -3,20 +3,20 @@ const router = express.Router();
 const Order = require("../models/orders");
 const Cart = require("../models/cart");
 const Product = require("../models/products");
+const { Transaction } = require("../models/payments");
+const { authenticateMultiOptional, authenticateMultiRequired } = require("../middleware/multiAuth");
 const PincodeDelivery = require("../models/pincodeDelivery");
 const User = require("../models/users");
 const { sendFetchOrderCommand } = require("../utils/websocket");
+// auth not used for now per request
+
+// No auth middleware for now; validate using userId from request body
 
 // POST /api/orders/create - Create new order from cart
-router.post("/create", async (req, res) => {
+router.post("/create", authenticateMultiRequired, async (req, res) => {
   try {
-    const {
-      userId,
-      deliveryAddressIndex,
-      deliveryType = "standard",
-      paymentMethod = "cod",
-      notes = "",
-    } = req.body;
+    const { deliveryAddressIndex, deliveryType = "standard", paymentMethod = "cod", notes = "" } = req.body;
+    const userId = req.auth?.sub;
 
     if (!userId || deliveryAddressIndex === undefined) {
       return res.status(400).json({
@@ -46,15 +46,26 @@ router.post("/create", async (req, res) => {
     const deliveryAddress = user.addresses[deliveryAddressIndex];
 
     // Get delivery options for the pincode
-    const deliveryOptions = await PincodeDelivery.getDeliveryOptions(
-      deliveryAddress.pincode
-    );
-    if (!deliveryOptions) {
-      return res.status(400).json({
-        success: false,
-        message: "Delivery not available for this pincode",
-      });
-    }
+    // NOTE: Pincode validation temporarily disabled per request
+    // const deliveryOptions = await PincodeDelivery.getDeliveryOptions(
+    //   deliveryAddress.pincode
+    // );
+    // if (!deliveryOptions) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Delivery not available for this pincode",
+    //   });
+    // }
+    const fallbackDeliveryOptions = {
+      standard: {
+        cost: 0,
+        timeframe: { minDays: 3, maxDays: 4, description: "3-4 days" },
+      },
+      fast: {
+        cost: 200,
+        timeframe: { minDays: 1, maxDays: 2, description: "1-2 days" },
+      },
+    };
 
     // Prepare order items from cart
     const orderItems = cart.items.map((item) => ({
@@ -71,8 +82,8 @@ router.post("/create", async (req, res) => {
     const deliveryDetails = {
       address: deliveryAddress,
       deliveryType: deliveryType,
-      deliveryCost: deliveryOptions[deliveryType].cost,
-      estimatedDelivery: deliveryOptions[deliveryType].timeframe,
+      deliveryCost: (fallbackDeliveryOptions[deliveryType] || fallbackDeliveryOptions.standard).cost,
+      estimatedDelivery: (fallbackDeliveryOptions[deliveryType] || fallbackDeliveryOptions.standard).timeframe,
     };
 
     // Create order
@@ -161,11 +172,52 @@ router.get("/:orderId", async (req, res) => {
   }
 });
 
-// GET /api/orders/user/:userId - Get user's orders
-router.get("/user/:userId", async (req, res) => {
+// GET /api/orders/status/:orderId - Lightweight order status query
+router.post("/status/:orderId", authenticateMultiOptional, async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { orderId } = req.params;
+    const { userId } = req.body;
+    const order = await Order.findByOrderId(orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    const authSub = req.auth?.sub;
+    const matches = userId || authSub;
+    if (!matches || order.userId?.toString() !== matches) {
+      return res.status(403).json({ success: false, message: "Forbidden" });
+    }
+    return res.json({
+      success: true,
+      data: {
+        orderId: order.orderId,
+        orderStatus: order.orderStatus,
+        deliveryStatus: order.deliveryDetails?.deliveryStatus,
+        deliveredAt: order.deliveredAt,
+        paymentStatus: order.paymentDetails?.status,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
+      },
+    });
+  } catch (error) {
+    console.error("Get order status error:", error);
+    return res.status(500).json({ success: false, message: "Error fetching order status" });
+  }
+});
+
+// GET /api/orders/user/:userId - Get user's orders
+// New: GET /api/orders/user (me) using auth
+router.get("/user", authenticateMultiRequired, async (req, res) => {
+  try {
+    const userId = req.auth?.sub;
     const { page = 1, limit = 10, status } = req.query;
+    let includes = req.query.include;
+    const includeSet = new Set(
+      Array.isArray(includes)
+        ? includes.flatMap((v) => String(v).split(","))
+        : includes
+        ? String(includes).split(",")
+        : []
+    );
 
     let query = { userId: userId, isActive: true };
     if (status) {
@@ -173,17 +225,92 @@ router.get("/user/:userId", async (req, res) => {
     }
 
     const skip = (page - 1) * limit;
+    const fields = [
+      "orderId",
+      "userId",
+      "orderStatus",
+      "paymentDetails.status",
+      "deliveryDetails.deliveryStatus",
+      "deliveredAt",
+      "subtotal",
+      "totalAmount",
+      "items",
+      "createdAt",
+      "updatedAt",
+    ];
+    if (includeSet.has("returns")) {
+      fields.push("returnRequests", "exchangeRequests");
+    }
+
     const orders = await Order.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(parseInt(limit))
+      .select(fields.join(" "))
+      .lean();
+
+    // Summarize
+    const summaries = await Promise.all(
+      orders.map(async (o) => {
+        const itemCount = Array.isArray(o.items)
+          ? o.items.reduce(
+              (sum, it) => sum + (it.status && it.status !== "active" ? 0 : it.quantity),
+              0
+            )
+          : 0;
+        const summary = {
+          orderId: o.orderId,
+          orderStatus: o.orderStatus,
+          deliveryStatus: o.deliveryDetails?.deliveryStatus,
+          deliveredAt: o.deliveredAt,
+          paymentStatus: o.paymentDetails?.status,
+          subtotal: o.subtotal,
+          totalAmount: o.totalAmount,
+          itemCount,
+          createdAt: o.createdAt,
+          updatedAt: o.updatedAt,
+        };
+
+        if (includeSet.has("items_preview") && Array.isArray(o.items)) {
+          summary.itemsPreview = o.items.slice(0, 2).map((it) => ({
+            productId: it.productId,
+            name: it.name,
+            quantity: it.quantity,
+            imageUrl: it.imageUrl,
+            status: it.status || "active",
+          }));
+        }
+
+        if (includeSet.has("returns")) {
+          summary.returnRequests = o.returnRequests || [];
+          summary.exchangeRequests = o.exchangeRequests || [];
+        }
+
+        if (includeSet.has("refunds")) {
+          const refunded = await Transaction.findOne({
+            orderId: o.orderId,
+            paymentStatus: "refunded",
+          })
+            .sort({ updatedAt: -1 })
+            .lean();
+          const latest =
+            refunded || (await Transaction.findOne({ orderId: o.orderId })
+              .sort({ createdAt: -1 })
+              .lean());
+          summary.refundStatus = refunded ? "refunded" : latest?.paymentStatus || "unknown";
+          summary.expectedCreditDate = refunded?.refundDetails?.refundDate;
+        }
+
+        return summary;
+      })
+    );
 
     const total = await Order.countDocuments(query);
 
     res.json({
       success: true,
       data: {
-        orders: orders,
+        orders: summaries,
         pagination: {
           page: parseInt(page),
           limit: parseInt(limit),
@@ -297,6 +424,68 @@ router.put("/:orderId/payment", async (req, res) => {
   }
 });
 
+// PUT /api/orders/:orderId/address - Update delivery address within 24 hours and before shipping
+router.put("/:orderId/address", authenticateMultiRequired, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { addressIndex } = req.body;
+
+    const order = await Order.findByOrderId(orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    const authSub = req.auth?.sub;
+    if (!authSub || order.userId?.toString() !== authSub) {
+      return res.status(403).json({ success: false, message: "Forbidden" });
+    }
+
+    const created = new Date(order.createdAt).getTime();
+    const now = Date.now();
+    const twentyFourHoursMs = 24 * 60 * 60 * 1000;
+    const withinWindow = now - created <= twentyFourHoursMs;
+    const notShipped = ["pending", "confirmed", "processing"].includes(order.orderStatus);
+
+    if (!withinWindow || !notShipped) {
+      return res.status(400).json({
+        success: false,
+        message: "Address can only be updated within 24 hours and before shipping",
+      });
+    }
+
+    // Fetch saved address by index from user's saved addresses
+    const user = await User.findById(authSub).select("addresses");
+    if (!user || !user.addresses || addressIndex === undefined || addressIndex < 0 || addressIndex >= user.addresses.length) {
+      return res.status(400).json({ success: false, message: "Invalid address index" });
+    }
+
+    const savedAddress = user.addresses[addressIndex];
+
+    // Pincode deliverability check disabled per request
+
+    order.deliveryDetails.address = {
+      street: savedAddress.street,
+      area: savedAddress.area,
+      city: savedAddress.city,
+      state: savedAddress.state,
+      pincode: savedAddress.pincode,
+      country: savedAddress.country || "India",
+    };
+    await order.save();
+
+    return res.json({
+      success: true,
+      message: "Delivery address updated",
+      data: {
+        orderId: order.orderId,
+        address: order.deliveryDetails.address,
+      },
+    });
+  } catch (error) {
+    console.error("Update address error:", error);
+    return res.status(500).json({ success: false, message: "Error updating address" });
+  }
+});
+
 // PUT /api/orders/:orderId/tracking - Add tracking number
 router.put("/:orderId/tracking", async (req, res) => {
   try {
@@ -339,10 +528,83 @@ router.put("/:orderId/tracking", async (req, res) => {
   }
 });
 
-// DELETE /api/orders/:orderId - Cancel order
-router.delete("/:orderId", async (req, res) => {
+// POST /api/orders/:orderId/return - Create a return request within 3 days from deliveredAt
+router.post("/:orderId/return", authenticateMultiRequired, async (req, res) => {
   try {
     const { orderId } = req.params;
+    const { itemIds = [], reason, pickupDate } = req.body || {};
+
+    const order = await Order.findByOrderId(orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    const authSub = req.auth?.sub;
+    if (!authSub || order.userId?.toString() !== authSub) {
+      return res.status(403).json({ success: false, message: "Forbidden" });
+    }
+
+    if (!order.deliveredAt || !order.isWithinReturnWindow()) {
+      return res.status(400).json({
+        success: false,
+        message: "Return window is 3 days from delivery",
+      });
+    }
+
+    const parsedPickup = pickupDate ? new Date(pickupDate) : undefined;
+    const { requestId } = await order.addReturnRequest(itemIds, reason, parsedPickup);
+
+    return res.json({
+      success: true,
+      message: "Return request created",
+      data: { requestId },
+    });
+  } catch (error) {
+    console.error("Create return request error:", error);
+    return res.status(500).json({ success: false, message: "Error creating return request" });
+  }
+});
+
+// POST /api/orders/:orderId/exchange - Create an exchange request within 3 days from deliveredAt
+router.post("/:orderId/exchange", authenticateMultiRequired, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { itemIds = [], reason, pickupDate } = req.body || {};
+
+    const order = await Order.findByOrderId(orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    const authSub = req.auth?.sub;
+    if (!authSub || order.userId?.toString() !== authSub) {
+      return res.status(403).json({ success: false, message: "Forbidden" });
+    }
+
+    if (!order.deliveredAt || !order.isWithinReturnWindow()) {
+      return res.status(400).json({
+        success: false,
+        message: "Exchange window is 3 days from delivery",
+      });
+    }
+
+    const parsedPickup = pickupDate ? new Date(pickupDate) : undefined;
+    const { requestId } = await order.addExchangeRequest(itemIds, reason, parsedPickup);
+
+    return res.json({
+      success: true,
+      message: "Exchange request created",
+      data: { requestId },
+    });
+  } catch (error) {
+    console.error("Create exchange request error:", error);
+    return res.status(500).json({ success: false, message: "Error creating exchange request" });
+  }
+});
+
+// DELETE /api/orders/:orderId - Cancel order
+router.delete("/:orderId", authenticateMultiRequired, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { itemIds } = req.body || {};
 
     const order = await Order.findByOrderId(orderId);
     if (!order) {
@@ -352,33 +614,73 @@ router.delete("/:orderId", async (req, res) => {
       });
     }
 
-    // Only allow cancellation of pending or confirmed orders
-    if (!["pending", "confirmed"].includes(order.orderStatus)) {
+    // Only allow cancellation before shipping for now
+    if (!["pending", "confirmed", "processing"].includes(order.orderStatus)) {
       return res.status(400).json({
         success: false,
         message: "Order cannot be cancelled at this stage",
       });
     }
 
-    // Restore product stock
-    for (const item of order.items) {
-      await Product.findOneAndUpdate(
-        { productId: item.productId },
-        { $inc: { stock: item.quantity } }
-      );
+    const authSub = req.auth?.sub;
+    if (!authSub || order.userId?.toString() !== authSub) {
+      return res.status(403).json({ success: false, message: "Forbidden" });
     }
 
-    // Mark order as cancelled
-    order.orderStatus = "cancelled";
-    order.isActive = false;
-    await order.save();
+    const isPartial = Array.isArray(itemIds) && itemIds.length > 0;
+
+    if (isPartial) {
+      // Partial cancel: mark selected items as cancelled and restock
+      let cancelledCount = 0;
+      for (const item of order.items) {
+        if (itemIds.includes(item.productId) && item.status === "active") {
+          item.status = "cancelled";
+          cancelledCount += 1;
+          await Product.findOneAndUpdate(
+            { productId: item.productId },
+            { $inc: { stock: item.quantity } }
+          );
+        }
+      }
+      if (cancelledCount === 0) {
+        return res.status(400).json({ success: false, message: "No matching active items to cancel" });
+      }
+      // Recalculate totals
+      order.calculateTotals();
+      // If all items cancelled, mark order cancelled/inactive
+      const anyActive = order.items.some((i) => i.status === "active");
+      if (!anyActive) {
+        order.orderStatus = "cancelled";
+        order.isActive = false;
+      }
+      await order.save();
+    } else {
+      // Full cancel: restock all items
+      for (const item of order.items) {
+        if (item.status === "active") {
+          await Product.findOneAndUpdate(
+            { productId: item.productId },
+            { $inc: { stock: item.quantity } }
+          );
+          item.status = "cancelled";
+        }
+      }
+      order.orderStatus = "cancelled";
+      order.isActive = false;
+      order.calculateTotals();
+      await order.save();
+    }
+
+    // TODO: trigger refund workflow based on cancelled items' value
 
     res.json({
       success: true,
-      message: "Order cancelled successfully",
+      message: isPartial ? "Selected items cancelled" : "Order cancelled successfully",
       data: {
         orderId: order.orderId,
         orderStatus: order.orderStatus,
+        subtotal: order.subtotal,
+        totalAmount: order.totalAmount,
       },
     });
   } catch (error) {

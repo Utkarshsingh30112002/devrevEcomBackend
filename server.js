@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const http = require("http");
 const WebSocket = require("ws");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const connectDB = require("./config/database");
@@ -21,6 +22,8 @@ const pincodeDeliveryRoutes = require("./routes/pincodeDelivery");
 const orderRoutes = require("./routes/orders");
 const paymentRoutes = require("./routes/payments");
 const otpRoutes = require("./routes/otp");
+const authRoutes = require("./routes/auth");
+const returnRoutes = require("./routes/returns");
 
 const app = express();
 
@@ -55,6 +58,7 @@ app.use(cors());
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Routes
 app.use("/api/products", productRoutes);
@@ -67,6 +71,8 @@ app.use("/api/pincode-delivery", pincodeDeliveryRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/otp", otpRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/returns", returnRoutes);
 
 // Basic route
 app.get("/", (req, res) => {
