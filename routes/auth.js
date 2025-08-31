@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
       secure: false,
       sameSite: "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
+      path: "/"
     });
 
     const userObj = user.toObject();
@@ -58,6 +58,49 @@ router.post("/login", async (req, res) => {
     return res.json({ token, user: userObj });
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+});
+
+// POST /api/auth/logout
+router.post("/logout", async (req, res) => {
+  try {
+    // Clear the auth cookie
+    res.clearCookie("auth_token", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      path: "/"
+    });
+    
+    return res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// GET /api/auth/me - Get current user from token
+router.get("/me", async (req, res) => {
+  try {
+    const token = req.cookies.auth_token;
+    
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const jwtSecret = process.env.JWT_SECRET || "dev-secret";
+    const decoded = jwt.verify(token, jwtSecret);
+    
+    const user = await User.findById(decoded.sub);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    const userObj = user.toObject();
+    delete userObj.password;
+    
+    return res.json({ user: userObj });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid token" });
   }
 });
 
