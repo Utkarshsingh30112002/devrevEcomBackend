@@ -10,6 +10,8 @@ A RESTful API for an ecommerce application built with Express.js, Node.js, and M
 - Search and filtering capabilities
 - Stock management
 - Security middleware (Helmet, CORS, Rate limiting)
+- Cookie/JWT auth with multi-auth (JWT or DevRev PAT + user_uuid)
+- Orders, returns/exchanges, refunds tracking
 
 ## Project Structure
 
@@ -51,9 +53,10 @@ The product schema includes:
 The user schema includes:
 
 - **Basic Info**: username, email, password, firstName, lastName
-- **Contact**: phone, address (street, city, state, zipCode, country)
+- **Contact**: phone, addresses[] { street, area, city, state, pincode, country, isDefault, addressType }
 - **Status**: isActive, role (user/admin), emailVerified
 - **Profile**: profileImage, dateOfBirth, lastLogin
+- **user_uuid (immutable)**: stable external reference (auto-generated for new users; fixed for seeded users)
 - **Timestamps**: Automatic createdAt and updatedAt fields
 
 ### Review Schema
@@ -79,6 +82,9 @@ The review schema includes:
    PORT=5000
    MONGODB_URI=mongodb://localhost:27017/ecommerce
    NODE_ENV=development
+   JWT_SECRET=dev-secret
+   DEVREV_PAT=your_devrev_pat_for_auth_tokens_create
+   DEVREV_AGENT_PAT=your_shared_agent_pat_for_backend_calls
    ```
 
 3. **Start MongoDB**:
@@ -106,6 +112,12 @@ The review schema includes:
 
 ## API Endpoints
 
+### Auth
+
+- `POST /api/auth/login` – login via username/email + password; sets HttpOnly cookie `auth_token`
+- `POST /api/auth/devrev-token` – exchange our auth for DevRev token
+  - Multi-auth: accepts JWT cookie/header OR `Authorization: Bearer <DEVREV_AGENT_PAT>` with `user_uuid` in query/body
+
 ### Products
 
 - `GET /api/products` - Get all products
@@ -123,10 +135,55 @@ The review schema includes:
 - `GET /api/users/username/:username` - Get user by username
 - `GET /api/users/email/:email` - Get user by email
 - `POST /api/users` - Create new user
-- `PUT /api/users/:id` - Update user
+- `PUT /api/users/:id` - Update user (note: `user_uuid` is immutable)
 - `DELETE /api/users/:id` - Delete user
 
 ### Reviews
+### Addresses (me)
+
+- `GET /api/addresses/me` – list my addresses
+- `POST /api/addresses/me` – add address
+- `PUT /api/addresses/me/:addressIndex` – update address
+- `DELETE /api/addresses/me/:addressIndex` – delete address
+- `PUT /api/addresses/me/:addressIndex/default` – set default
+- `GET /api/addresses/me/default` – get default
+  - Requires auth (JWT or DevRev PAT + user_uuid). Responses include `user_uuid`.
+
+### Cart (me)
+
+- `GET /api/cart/me` – get my cart
+- `POST /api/cart/me/add` – add item `{ productId, quantity }`
+- `PUT /api/cart/me/update` – update quantity `{ productId, quantity }`
+- `DELETE /api/cart/me/remove/:productId` – remove item
+- `DELETE /api/cart/me/clear` – clear cart
+- `GET /api/cart/me/count` – item counts
+  - Requires auth (JWT or DevRev PAT + user_uuid). Responses include `user_uuid`.
+
+### Orders
+
+- `POST /api/orders/create` – create order from cart using body `{ deliveryAddressIndex, deliveryType, paymentMethod, notes }`
+- `POST /api/orders/status/:orderId` – get order status (uses auth or `userId` fallback)
+- `PUT /api/orders/:orderId/address` – update delivery address within 24h and before shipping; body `{ addressIndex }`
+- `DELETE /api/orders/:orderId` – cancel order; supports partial via body `{ itemIds: [] }`
+- `GET /api/orders/user` – list my orders (lightweight summaries)
+  - Query `include=items_preview,returns,refunds` to enrich response
+
+### Returns & Exchanges
+
+- `POST /api/orders/:orderId/return` – create return request (within 3 days from deliveredAt) `{ itemIds, reason, pickupDate }`
+- `POST /api/orders/:orderId/exchange` – create exchange request (within 3 days) `{ itemIds, reason, pickupDate }`
+- `POST /api/returns` – alternative create (refund/exchange) with `{ orderId, itemIds, reason_code, return_type, pickupDate }`
+- `POST /api/returns/:returnId/schedule-pickup` – mock pickup scheduling `{ preferred_date, preferred_time }`
+
+### Payments
+
+- `POST /api/payments/process` – process payment for an order
+- `GET /api/payments/saved-cards/me` – list my saved cards
+- `POST /api/payments/saved-cards/me` – add saved card
+- `PUT /api/payments/saved-cards/me/default` – set default card
+- `DELETE /api/payments/saved-cards/me/:cardNumber` – remove saved card
+- `GET /api/payments/transactions/me` – my transactions
+- `GET /api/payments/refunds/:orderId` – refund status for an order
 
 - `GET /api/reviews` - Get all reviews
 - `GET /api/reviews/:id` - Get review by ID
@@ -156,6 +213,27 @@ The review schema includes:
 - `isVerified` - Filter verified reviews (true/false)
 
 ## Example Usage
+### Auth + Multi-auth
+```
+# Login (sets HttpOnly cookie)
+curl -i -X POST http://localhost:5000/api/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"abhinav.chintala2@gmail.com","password":"hashedPassword123"}'
+
+# DevRev agent call (backend-to-backend)
+curl -X POST 'http://localhost:5000/api/orders/status/ORD123' \
+  -H 'Authorization: Bearer ${DEVREV_AGENT_PAT}' \
+  -H 'Content-Type: application/json' \
+  -d '{"user_uuid":"<stable-uuid>"}'
+```
+
+### Update users by password (maintenance)
+```
+# Dry-run
+npm run users:update-by-password -- /abs/path/updates.json --dry-run
+# Apply
+npm run users:update-by-password -- /abs/path/updates.json
+```
 
 ### Create a Laptop Product
 ```json
