@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     firstName: { type: String, required: true, trim: true },
     lastName: { type: String, required: true, trim: true },
-    user_uuid: { type: String, required: true, unique: true, default: uuidv4, immutable: true },
+    user_uuid: { type: String, required: true, unique: true, default: uuidv4 },
 
     // --- Contact Information ---
     phone: { type: String, trim: true },

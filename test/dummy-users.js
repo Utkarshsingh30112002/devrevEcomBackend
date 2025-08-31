@@ -393,9 +393,71 @@ console.log(process.env.MONGODB_URI)
   }
 };
 
+// Backfill user_uuid for existing users (bypass immutability via native collection)
+const backfillUserUuid = async () => {
+  try {
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ecommerce",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+    console.log(process.env.MONGODB_URI)
 
+    let processed = 0;
+    let matched = 0;
+    let setCount = 0;
+
+    for (const du of dummyUsers) {
+      processed += 1;
+      let user = await User.findOne({ password: du.password });
+      if (!user) {
+        user = await User.findOne({ username: du.username });
+      }
+      if (!user) {
+        console.warn(`No user found for UUID backfill (record ${processed}, username=${du.username})`);
+        continue;
+      }
+      matched += 1;
+      // Force-set user_uuid using native collection (bypasses immutability)
+      if (du.user_uuid) {
+        const res = await User.collection.updateOne(
+          { _id: user._id },
+          { $set: { user_uuid: du.user_uuid } }
+        );
+        if (res.modifiedCount > 0) {
+          setCount += 1;
+          console.log(`Set user_uuid for ${user.username} (${user._id})`);
+        } else {
+          console.log(`user_uuid unchanged for ${user.username}`);
+        }
+      }
+    }
+
+    console.log("\nUUID backfill summary:", { processed, matched, setCount });
+    await mongoose.connection.close();
+    console.log("MongoDB connection closed.");
+  } catch (error) {
+    console.error("Error backfilling user_uuid:", error);
+    process.exit(1);
+  }
+};
+
+// Entry: choose action via argv/env
+const shouldBackfillUuid =
+  process.argv.includes("--backfill-uuid") || String(process.env.BACKFILL_UUID || "").toLowerCase() === "true";
+const shouldUpdateByPassword =
+  process.argv.includes("--update-by-password") || String(process.env.UPDATE_BY_PASSWORD || "").toLowerCase() === "true";
+const shouldSeed = process.argv.includes("--seed");
+
+if (shouldBackfillUuid) {
+  backfillUserUuid();
+} else if (shouldUpdateByPassword) {
   updateUsersByPassword();
-
-  // Run the seeding function by default
-  // seedUsers();
-
+} else if (shouldSeed) {
+  seedUsers();
+} else {
+  // Default to update-by-password for safety
+  updateUsersByPassword();
+}

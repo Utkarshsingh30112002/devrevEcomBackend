@@ -30,6 +30,15 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    console.log('🔍 User data for JWT:', {
+      _id: user._id.toString(),
+      user_uuid: user.user_uuid,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName
+    });
+
     const jwtSecret = process.env.JWT_SECRET || "dev-secret";
     const token = jwt.sign(
       {
@@ -108,13 +117,20 @@ router.get("/me", async (req, res) => {
 
 router.post("/devrev-token", authenticateMultiRequired, async (req, res) => {
   try {
+    console.log('🔍 Auth data received:', req.auth);
     const { user_uuid, email, display_name, username } = req.auth || {};
     const userUuid = user_uuid;
     const finalEmail = email;
     const finalDisplayName = display_name || username;
 
+    console.log('🔍 Extracted fields:', { userUuid, finalEmail, finalDisplayName });
+
     if (!userUuid || !finalEmail || !finalDisplayName) {
-      return res.status(400).json({ message: "Required user fields missing in token" });
+      return res.status(400).json({ 
+        message: "Required user fields missing in token",
+        received: { user_uuid, email, display_name, username },
+        extracted: { userUuid, finalEmail, finalDisplayName }
+      });
     }
 
     const devrevPat = process.env.DEVREV_PAT;
