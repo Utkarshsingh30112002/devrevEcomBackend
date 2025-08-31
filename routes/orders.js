@@ -187,67 +187,34 @@ router.get("/user", authenticateMultiRequired, async (req, res) => {
       .lean();
 
     // Summarize
-    const summaries = await Promise.all(
-      orders.map(async (o) => {
-        const itemCount = Array.isArray(o.items)
-          ? o.items.reduce(
-              (sum, it) => sum + (it.status && it.status !== "active" ? 0 : it.quantity),
-              0
-            )
-          : 0;
-        const summary = {
-          orderId: o.orderId,
-          orderStatus: o.orderStatus,
-          deliveryStatus: o.deliveryDetails?.deliveryStatus,
-          deliveredAt: o.deliveredAt,
-          paymentStatus: o.paymentDetails?.status,
-          subtotal: o.subtotal,
-          totalAmount: o.totalAmount,
-          itemCount,
-          createdAt: o.createdAt,
-          updatedAt: o.updatedAt,
-        };
-
-        if (includeSet.has("items_preview") && Array.isArray(o.items)) {
-          summary.itemsPreview = o.items.slice(0, 2).map((it) => ({
-            productId: it.productId,
-            name: it.name,
-            quantity: it.quantity,
-            imageUrl: it.imageUrl,
-            status: it.status || "active",
-          }));
-        }
-
-        if (includeSet.has("returns")) {
-          summary.returnRequests = o.returnRequests || [];
-          summary.exchangeRequests = o.exchangeRequests || [];
-        }
-
-        if (includeSet.has("refunds")) {
-          const refunded = await Transaction.findOne({
-            orderId: o.orderId,
-            paymentStatus: "refunded",
-          })
-            .sort({ updatedAt: -1 })
-            .lean();
-          const latest =
-            refunded || (await Transaction.findOne({ orderId: o.orderId })
-              .sort({ createdAt: -1 })
-              .lean());
-          summary.refundStatus = refunded ? "refunded" : latest?.paymentStatus || "unknown";
-          summary.expectedCreditDate = refunded?.refundDetails?.refundDate;
-        }
-
-        return summary;
-      })
-    );
+    // Return full order objects instead of summaries for frontend compatibility
+    const fullOrders = orders.map((o) => ({
+      _id: o._id,
+      orderId: o.orderId,
+      userId: o.userId,
+      items: o.items || [],
+      deliveryDetails: o.deliveryDetails || {},
+      paymentDetails: o.paymentDetails || {},
+      orderStatus: o.orderStatus,
+      subtotal: o.subtotal,
+      deliveryCost: o.deliveryCost,
+      discount: o.discount,
+      totalAmount: o.totalAmount,
+      notes: o.notes,
+      isActive: o.isActive,
+      createdAt: o.createdAt,
+      updatedAt: o.updatedAt,
+      deliveredAt: o.deliveredAt,
+      returnRequests: o.returnRequests || [],
+      exchangeRequests: o.exchangeRequests || [],
+    }));
 
     const total = await Order.countDocuments(query);
 
     res.json({
       success: true,
       data: {
-        orders: summaries,
+        orders: fullOrders,
         pagination: {
           page: parseInt(page),
           limit: parseInt(limit),
