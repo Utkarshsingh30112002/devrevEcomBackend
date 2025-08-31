@@ -5,11 +5,11 @@ const User = require("../models/users");
 // Dummy users data
 const dummyUsers = [
   {
-    username: "john_doe",
-    email: "john.doe@example.com",
+    username: "abhinav.chintala2@gmail.com",
+    email: "abhinav.chintala2@gmail.com",
     password: "hashedPassword123", // In real app, this would be properly hashed
-    firstName: "John",
-    lastName: "Doe",
+    firstName: "Abhinav",
+    lastName: "Chintalacheruvu",
     user_uuid: "3f0f1a6e-9f1b-4a0a-93b1-2c0c08d8a111",
     phone: "+91-9876543210",
     addresses: [
@@ -40,23 +40,33 @@ const dummyUsers = [
     emailVerified: true,
   },
   {
-    username: "jane_smith",
-    email: "jane.smith@example.com",
+    username: "c-jaswanth.meka@devrev.ai",
+    email: "c-jaswanth.meka@devrev.ai",
     password: "hashedPassword456",
-    firstName: "Jane",
-    lastName: "Smith",
+    firstName: "Jaswanth",
+    lastName: "Chowdary",
     user_uuid: "7c2f8b90-4d5e-4f1e-9d2a-1a2b3c4d5e66",
     phone: "+91-9876543211",
     addresses: [
       {
-        street: "456 Oak Avenue",
-        area: "Connaught Place",
-        city: "Delhi",
-        state: "Delhi",
-        pincode: "110001",
+        street: "Flat No. B-702, Orchid Towers",
+        area: "Baner",
+        city: "Pune",
+        state: "Maharashtra",
+        pincode: "411005",
         country: "India",
         isDefault: true,
         addressType: "home",
+      },
+      {
+        street: "14/5B, Rose Villa, Princess Street",
+        area: "Fort Kochi",
+        city: "Kochi",
+        state: "Kerala",
+        pincode: "682001",
+        country: "India",
+        isDefault: false,
+        addressType: "office",
       },
     ],
     role: "user",
@@ -65,23 +75,33 @@ const dummyUsers = [
     emailVerified: true,
   },
   {
-    username: "mike_wilson",
-    email: "mike.wilson@example.com",
+    username: "utkarshsingh8871@gmail.com",
+    email: "utkarshsingh8871@gmail.com",
     password: "hashedPassword789",
-    firstName: "Mike",
-    lastName: "Wilson",
+    firstName: "Utkarsh",
+    lastName: "Singh",
     user_uuid: "d9a0c123-6b7c-4f2e-8a9b-0c1d2e3f4a55",
     phone: "+91-9876543212",
     addresses: [
       {
-        street: "789 Pine Road",
-        area: "Indiranagar",
-        city: "Bangalore",
-        state: "Karnataka",
-        pincode: "560001",
+        street: "Flat No. B-702, Orchid Towers",
+        area: "Baner",
+        city: "Pune",
+        state: "Maharashtra",
+        pincode: "411005",
         country: "India",
         isDefault: true,
         addressType: "home",
+      },
+      {
+        street: "14/5B, Rose Villa, Princess Street",
+        area: "Fort Kochi",
+        city: "Kochi",
+        state: "Kerala",
+        pincode: "682001",
+        country: "India",
+        isDefault: false,
+        addressType: "office",
       },
     ],
     role: "user",
@@ -99,14 +119,24 @@ const dummyUsers = [
     phone: "+91-9876543213",
     addresses: [
       {
-        street: "321 Elm Street",
-        area: "T Nagar",
-        city: "Chennai",
-        state: "Tamil Nadu",
-        pincode: "600001",
+        street: "Flat No. B-702, Orchid Towers",
+        area: "Baner",
+        city: "Pune",
+        state: "Maharashtra",
+        pincode: "411005",
         country: "India",
         isDefault: true,
         addressType: "home",
+      },
+      {
+        street: "14/5B, Rose Villa, Princess Street",
+        area: "Fort Kochi",
+        city: "Kochi",
+        state: "Kerala",
+        pincode: "682001",
+        country: "India",
+        isDefault: false,
+        addressType: "office",
       },
     ],
     role: "user",
@@ -124,13 +154,23 @@ const dummyUsers = [
     phone: "+91-9876543214",
     addresses: [
       {
-        street: "Admin Building",
-        area: "Hitech City",
-        city: "Hyderabad",
-        state: "Telangana",
-        pincode: "500001",
+        street: "Flat No. B-702, Orchid Towers",
+        area: "Baner",
+        city: "Pune",
+        state: "Maharashtra",
+        pincode: "411005",
         country: "India",
         isDefault: true,
+        addressType: "home",
+      },
+      {
+        street: "14/5B, Rose Villa, Princess Street",
+        area: "Fort Kochi",
+        city: "Kochi",
+        state: "Kerala",
+        pincode: "682001",
+        country: "India",
+        isDefault: false,
         addressType: "office",
       },
     ],
@@ -149,13 +189,23 @@ const dummyUsers = [
     phone: "+91-9876543215",
     addresses: [
       {
-        street: "Tech Park Road",
-        area: "Hinjewadi",
+        street: "Flat No. B-702, Orchid Towers",
+        area: "Baner",
         city: "Pune",
         state: "Maharashtra",
-        pincode: "411001",
+        pincode: "411005",
         country: "India",
         isDefault: true,
+        addressType: "home",
+      },
+      {
+        street: "14/5B, Rose Villa, Princess Street",
+        area: "Fort Kochi",
+        city: "Kochi",
+        state: "Kerala",
+        pincode: "682001",
+        country: "India",
+        isDefault: false,
         addressType: "office",
       },
     ],
@@ -174,14 +224,24 @@ const dummyUsers = [
     phone: "+91-9876543216",
     addresses: [
       {
-        street: "Gaming Street",
-        area: "Park Street",
-        city: "Kolkata",
-        state: "West Bengal",
-        pincode: "700001",
+        street: "Flat No. B-702, Orchid Towers",
+        area: "Baner",
+        city: "Pune",
+        state: "Maharashtra",
+        pincode: "411005",
         country: "India",
         isDefault: true,
         addressType: "home",
+      },
+      {
+        street: "14/5B, Rose Villa, Princess Street",
+        area: "Fort Kochi",
+        city: "Kochi",
+        state: "Kerala",
+        pincode: "682001",
+        country: "India",
+        isDefault: false,
+        addressType: "office",
       },
     ],
     role: "user",
@@ -199,13 +259,23 @@ const dummyUsers = [
     phone: "+91-9876543217",
     addresses: [
       {
-        street: "Office Complex",
-        area: "Satellite",
-        city: "Ahmedabad",
-        state: "Gujarat",
-        pincode: "380001",
+        street: "Flat No. B-702, Orchid Towers",
+        area: "Baner",
+        city: "Pune",
+        state: "Maharashtra",
+        pincode: "411005",
         country: "India",
         isDefault: true,
+        addressType: "home",
+      },
+      {
+        street: "14/5B, Rose Villa, Princess Street",
+        area: "Fort Kochi",
+        city: "Kochi",
+        state: "Kerala",
+        pincode: "682001",
+        country: "India",
+        isDefault: false,
         addressType: "office",
       },
     ],
@@ -216,7 +286,7 @@ const dummyUsers = [
   },
 ];
 
-// Function to seed users
+// Function to seed users (destructive: clears and inserts)
 const seedUsers = async () => {
   try {
     // Connect to MongoDB
@@ -252,5 +322,80 @@ const seedUsers = async () => {
   }
 };
 
-// Run the seeding function
-seedUsers();
+// Function to update existing users by matching password (non-destructive)
+const updateUsersByPassword = async () => {
+  try {
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ecommerce",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+console.log(process.env.MONGODB_URI)
+    const whitelist = new Set([
+      "username",
+      "email",
+      "firstName",
+      "lastName",
+      "phone",
+      "addresses",
+      "role",
+      "profileImage",
+      "dateOfBirth",
+      "emailVerified",
+      // intentionally excluding password
+      // user_uuid handled specially below
+    ]);
+
+    let processed = 0;
+    let matched = 0;
+    let updated = 0;
+
+    for (const du of dummyUsers) {
+      processed += 1;
+      const user = await User.findOne({ password: du.password });
+      if (!user) {
+        console.warn(
+          `No user found for provided password (record ${processed}, username=${du.username})`
+        );
+        continue;
+      }
+      matched += 1;
+
+      const payload = {};
+      for (const [k, v] of Object.entries(du)) {
+        if (whitelist.has(k)) payload[k] = v;
+      }
+
+      // Maintain existing user_uuid; set only if missing on the DB record
+      if (!user.user_uuid && du.user_uuid) {
+        payload.user_uuid = du.user_uuid;
+      }
+
+      try {
+        const res = await User.updateOne({ _id: user._id }, { $set: payload });
+        if (res.modifiedCount > 0) updated += 1;
+        console.log(
+          `Updated ${user.username} (${user._id}) fields: ${Object.keys(payload).join(", ")}`
+        );
+      } catch (err) {
+        console.error(`Failed updating ${user.username}:`, err.message);
+      }
+    }
+
+    console.log("\nUpdate by password summary:", { processed, matched, updated });
+    await mongoose.connection.close();
+    console.log("MongoDB connection closed.");
+  } catch (error) {
+    console.error("Error updating users by password:", error);
+    process.exit(1);
+  }
+};
+
+
+  updateUsersByPassword();
+
+  // Run the seeding function by default
+  // seedUsers();
+
