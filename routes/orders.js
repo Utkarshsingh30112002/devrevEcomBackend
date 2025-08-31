@@ -142,70 +142,7 @@ router.post("/create", authenticateMultiRequired, async (req, res) => {
   }
 });
 
-// GET /api/orders/:orderId - Get order details
-router.get("/:orderId", async (req, res) => {
-  try {
-    const { orderId } = req.params;
-
-    const order = await Order.findByOrderId(orderId).populate(
-      "userId",
-      "firstName lastName email phone"
-    );
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      data: order,
-    });
-  } catch (error) {
-    console.error("Get order error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error fetching order",
-    });
-  }
-});
-
-// GET /api/orders/status/:orderId - Lightweight order status query
-router.post("/status/:orderId", authenticateMultiOptional, async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    const { userId } = req.body;
-    const order = await Order.findByOrderId(orderId);
-    if (!order) {
-      return res.status(404).json({ success: false, message: "Order not found" });
-    }
-    const authSub = req.auth?.sub;
-    const matches = userId || authSub;
-    if (!matches || order.userId?.toString() !== matches) {
-      return res.status(403).json({ success: false, message: "Forbidden" });
-    }
-    return res.json({
-      success: true,
-      data: {
-        orderId: order.orderId,
-        orderStatus: order.orderStatus,
-        deliveryStatus: order.deliveryDetails?.deliveryStatus,
-        deliveredAt: order.deliveredAt,
-        paymentStatus: order.paymentDetails?.status,
-        createdAt: order.createdAt,
-        updatedAt: order.updatedAt,
-      },
-    });
-  } catch (error) {
-    console.error("Get order status error:", error);
-    return res.status(500).json({ success: false, message: "Error fetching order status" });
-  }
-});
-
-// GET /api/orders/user/:userId - Get user's orders
-// New: GET /api/orders/user (me) using auth
+// GET /api/orders/user (me) using auth - MUST come before /:orderId route
 router.get("/user", authenticateMultiRequired, async (req, res) => {
   try {
     const userId = req.auth?.sub;
@@ -325,6 +262,68 @@ router.get("/user", authenticateMultiRequired, async (req, res) => {
       success: false,
       message: "Error fetching user orders",
     });
+  }
+});
+
+// GET /api/orders/:orderId - Get order details
+router.get("/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    const order = await Order.findByOrderId(orderId).populate(
+      "userId",
+      "firstName lastName email phone"
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: order,
+    });
+  } catch (error) {
+    console.error("Get order error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching order",
+    });
+  }
+});
+
+// GET /api/orders/status/:orderId - Lightweight order status query
+router.post("/status/:orderId", authenticateMultiOptional, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { userId } = req.body;
+    const order = await Order.findByOrderId(orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    const authSub = req.auth?.sub;
+    const matches = userId || authSub;
+    if (!matches || order.userId?.toString() !== matches) {
+      return res.status(403).json({ success: false, message: "Forbidden" });
+    }
+    return res.json({
+      success: true,
+      data: {
+        orderId: order.orderId,
+        orderStatus: order.orderStatus,
+        deliveryStatus: order.deliveryDetails?.deliveryStatus,
+        deliveredAt: order.deliveredAt,
+        paymentStatus: order.paymentDetails?.status,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
+      },
+    });
+  } catch (error) {
+    console.error("Get order status error:", error);
+    return res.status(500).json({ success: false, message: "Error fetching order status" });
   }
 });
 
