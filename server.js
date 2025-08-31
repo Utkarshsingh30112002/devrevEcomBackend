@@ -53,7 +53,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS middleware
-app.use(cors());
+app.use(cors({ origin: '*' }));
 
 // Body parser middleware
 app.use(express.json());
