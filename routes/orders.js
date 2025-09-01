@@ -662,6 +662,9 @@ router.post("/:orderId/return", authenticateMultiRequired, async (req, res) => {
 
     const parsedPickup = pickupDate ? new Date(pickupDate) : undefined;
     const { requestId } = await order.addReturnRequest(itemIds, reason, parsedPickup);
+    // Reflect requested state at the top-level
+    order.orderStatus = "return_requested";
+    await order.save();
 
     return res.json({
       success: true,
@@ -698,6 +701,9 @@ router.post("/:orderId/exchange", authenticateMultiRequired, async (req, res) =>
 
     const parsedPickup = pickupDate ? new Date(pickupDate) : undefined;
     const { requestId } = await order.addExchangeRequest(itemIds, reason, parsedPickup);
+    // Reflect requested state at the top-level
+    order.orderStatus = "exchange_requested";
+    await order.save();
 
     return res.json({
       success: true,

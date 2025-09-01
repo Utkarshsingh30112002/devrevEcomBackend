@@ -88,6 +88,8 @@ const orderSchema = new mongoose.Schema(
         "processing",
         "shipped",
         "delivered",
+        "exchange_requested",
+        "return_requested",
         "cancelled",
         "refunded",
       ],
