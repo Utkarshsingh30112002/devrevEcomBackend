@@ -176,7 +176,7 @@ router.post("/create", authenticateMultiRequired, async (req, res) => {
 router.get("/user", authenticateMultiRequired, async (req, res) => {
   try {
     const userId = req.auth?.sub;
-    const { page = 1, limit = 10, status } = req.query;
+    const { page = 1, limit = 10, status, includeCancelled } = req.query;
     let includes = req.query.include;
     const includeSet = new Set(
       Array.isArray(includes)
@@ -186,7 +186,13 @@ router.get("/user", authenticateMultiRequired, async (req, res) => {
         : []
     );
 
-    let query = { userId: userId, isActive: true };
+    const includeCancelledBool =
+      String(includeCancelled || "").toLowerCase() === "true";
+
+    let query = { userId: userId };
+    if (!includeCancelledBool) {
+      query.isActive = true;
+    }
     if (status) {
       query.orderStatus = status;
     }
@@ -259,6 +265,110 @@ router.get("/user", authenticateMultiRequired, async (req, res) => {
     });
   } catch (error) {
     console.error("Get user orders error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching user orders",
+    });
+  }
+});
+
+// POST /api/orders/user/query (me) - same as GET /user, but reads params from body
+router.post("/user/query", authenticateMultiRequired, async (req, res) => {
+  try {
+    const userId = req.auth?.sub;
+    const {
+      page = 1,
+      limit = 10,
+      status,
+      includeCancelled,
+      include,
+    } = req.body || {};
+
+    const includeSet = new Set(
+      Array.isArray(include)
+        ? include.flatMap((v) => String(v).split(","))
+        : include
+        ? String(include).split(",")
+        : []
+    );
+
+    const includeCancelledBool =
+      String(includeCancelled || "").toLowerCase() === "true";
+
+    let query = { userId: userId };
+    if (!includeCancelledBool) {
+      query.isActive = true;
+    }
+    if (status) {
+      query.orderStatus = status;
+    }
+
+    const skip = (page - 1) * limit;
+    const fields = [
+      "orderId",
+      "userId",
+      "orderStatus",
+      "paymentDetails.status",
+      "deliveryDetails.deliveryStatus",
+      "deliveredAt",
+      "subtotal",
+      "totalAmount",
+      "items",
+      "createdAt",
+      "updatedAt",
+    ];
+    if (includeSet.has("returns")) {
+      fields.push("returnRequests", "exchangeRequests");
+    }
+
+    const orders = await Order.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit))
+      .select(fields.join(" "))
+      .lean();
+
+    const deeplinkMap = await buildDeeplinkMap(
+      orders.flatMap((o) => (o.items || []).map((i) => i.productId))
+    );
+
+    const fullOrders = orders.map((o) => ({
+      _id: o._id,
+      orderId: o.orderId,
+      userId: o.userId,
+      items: withDeeplink(o.items || [], deeplinkMap),
+      deliveryDetails: o.deliveryDetails || {},
+      paymentDetails: o.paymentDetails || {},
+      orderStatus: o.orderStatus,
+      subtotal: o.subtotal,
+      deliveryCost: o.deliveryCost,
+      discount: o.discount,
+      totalAmount: o.totalAmount,
+      notes: o.notes,
+      isActive: o.isActive,
+      createdAt: o.createdAt,
+      updatedAt: o.updatedAt,
+      deliveredAt: o.deliveredAt,
+      returnRequests: o.returnRequests || [],
+      exchangeRequests: o.exchangeRequests || [],
+    }));
+
+    const total = await Order.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: {
+        orders: fullOrders,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: total,
+          pages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Get user orders (body) error:", error);
     res.status(500).json({
       success: false,
       message: "Error fetching user orders",
