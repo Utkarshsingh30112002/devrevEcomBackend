@@ -35,12 +35,30 @@ function setCachedAuthForUserUuid(userUuid, data) {
 async function resolveAgentUserFromUuid(req) {
   const userUuid = req.query?.user_uuid || req.body?.user_uuid;
   if (!userUuid) return null;
+  
   // Try cache first
   const cached = getCachedAuthForUserUuid(userUuid);
   if (cached) return cached;
 
-  const user = await User.findOne({ user_uuid: userUuid });
+  // Try to find user by the provided UUID
+  let user = await User.findOne({ user_uuid: userUuid });
+  
+  // If no user found and this is an agent call, use fallback UUID
+  if (!user && hasValidAgentPat(req)) {
+    console.log(`🔄 Agent call: UUID ${userUuid} not found, using fallback UUID`);
+    const fallbackUuid = "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c77";
+    user = await User.findOne({ user_uuid: fallbackUuid });
+    
+    if (user) {
+      console.log(`✅ Fallback user found: ${user.email} (${fallbackUuid})`);
+    } else {
+      console.log(`⚠️ Fallback user not found either: ${fallbackUuid}`);
+      return null;
+    }
+  }
+  
   if (!user) return null;
+  
   const authData = {
     sub: user._id.toString(),
     user_uuid: user.user_uuid,
@@ -50,6 +68,7 @@ async function resolveAgentUserFromUuid(req) {
     display_name: `${user.firstName} ${user.lastName}`.trim(),
     agent: true,
   };
+  
   setCachedAuthForUserUuid(userUuid, authData);
   return authData;
 }
