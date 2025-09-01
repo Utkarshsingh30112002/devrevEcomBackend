@@ -5,6 +5,29 @@ const Product = require("../models/products");
 const { sendFetchCartCommand } = require("../utils/websocket");
 const { authenticateMultiRequired } = require("../middleware/multiAuth");
 
+// Helper to build productId -> Mongo _id map for deeplinks
+async function buildDeeplinkMap(productIds) {
+  const uniqueIds = Array.from(new Set(productIds.filter(Boolean)));
+  if (uniqueIds.length === 0) return new Map();
+  const products = await Product.find({ productId: { $in: uniqueIds } }).select("_id productId").lean();
+  const map = new Map();
+  for (const p of products) {
+    map.set(p.productId, p._id?.toString());
+  }
+  return map;
+}
+
+function withDeeplink(items, deeplinkMap) {
+  return (items || []).map((it) => {
+    const plain = typeof it.toObject === "function" ? it.toObject() : it;
+    const mongoId = deeplinkMap.get(plain.productId);
+    if (mongoId) {
+      plain.deeplink = `http://13.233.107.200/product/${mongoId}`;
+    }
+    return plain;
+  });
+}
+
 // Helper function to get short description
 function getShortDescription(productName, type) {
   const descriptions = {
@@ -48,11 +71,14 @@ router.get("/me", authenticateMultiRequired, async (req, res) => {
       await cart.save();
     }
 
+    const deeplinkMap = await buildDeeplinkMap((cart.items || []).map((i) => i.productId));
+    const itemsWithLinks = withDeeplink(cart.items, deeplinkMap);
+
     res.json({
       success: true,
       data: {
         user_uuid: req.auth.user_uuid,
-        items: cart.items,
+        items: itemsWithLinks,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
         itemCount: cart.items.length,
@@ -135,12 +161,15 @@ router.post("/me/add", authenticateMultiRequired, async (req, res) => {
       sendFetchCartCommand(userId);
     }
 
+    const deeplinkMap = await buildDeeplinkMap((cart.items || []).map((i) => i.productId));
+    const itemsWithLinks = withDeeplink(cart.items, deeplinkMap);
+
     res.json({
       success: true,
       message: "Item added to cart successfully",
       data: {
         user_uuid: req.auth.user_uuid,
-        items: cart.items,
+        items: itemsWithLinks,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
         itemCount: cart.items.length,
@@ -202,12 +231,15 @@ router.put("/me/update", authenticateMultiRequired, async (req, res) => {
       sendFetchCartCommand(userId);
     }
 
+    const deeplinkMap = await buildDeeplinkMap((cart.items || []).map((i) => i.productId));
+    const itemsWithLinks = withDeeplink(cart.items, deeplinkMap);
+
     res.json({
       success: true,
       message: "Cart updated successfully",
       data: {
         user_uuid: req.auth.user_uuid,
-        items: cart.items,
+        items: itemsWithLinks,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
         itemCount: cart.items.length,
@@ -244,12 +276,15 @@ router.delete("/me/remove/:productId", authenticateMultiRequired, async (req, re
       sendFetchCartCommand(userId);
     }
 
+    const deeplinkMap = await buildDeeplinkMap((cart.items || []).map((i) => i.productId));
+    const itemsWithLinks = withDeeplink(cart.items, deeplinkMap);
+
     res.json({
       success: true,
       message: "Item removed from cart successfully",
       data: {
         user_uuid: req.auth.user_uuid,
-        items: cart.items,
+        items: itemsWithLinks,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
         itemCount: cart.items.length,
@@ -285,12 +320,15 @@ router.delete("/me/clear", authenticateMultiRequired, async (req, res) => {
       sendFetchCartCommand(userId);
     }
 
+    const deeplinkMap = await buildDeeplinkMap((cart.items || []).map((i) => i.productId));
+    const itemsWithLinks = withDeeplink(cart.items, deeplinkMap);
+
     res.json({
       success: true,
       message: "Cart cleared successfully",
       data: {
         user_uuid: req.auth.user_uuid,
-        items: cart.items,
+        items: itemsWithLinks,
         totalItems: cart.totalItems,
         totalAmount: cart.totalAmount,
         itemCount: cart.items.length,

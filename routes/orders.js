@@ -8,6 +8,28 @@ const { authenticateMultiOptional, authenticateMultiRequired } = require("../mid
 const PincodeDelivery = require("../models/pincodeDelivery");
 const User = require("../models/users");
 const { sendFetchOrderCommand } = require("../utils/websocket");
+async function buildDeeplinkMap(productIds) {
+  const uniqueIds = Array.from(new Set(productIds.filter(Boolean)));
+  if (uniqueIds.length === 0) return new Map();
+  const products = await Product.find({ productId: { $in: uniqueIds } }).select("_id productId").lean();
+  const map = new Map();
+  for (const p of products) {
+    map.set(p.productId, p._id?.toString());
+  }
+  return map;
+}
+
+function withDeeplink(items, deeplinkMap) {
+  return (items || []).map((it) => {
+    const plain = typeof it.toObject === "function" ? it.toObject() : it;
+    const mongoId = deeplinkMap.get(plain.productId);
+    if (mongoId) {
+      plain.deeplink = `http://13.233.107.200/product/${mongoId}`;
+    }
+    return plain;
+  });
+}
+
 // auth not used for now per request
 
 // No auth middleware for now; validate using userId from request body
@@ -121,12 +143,20 @@ router.post("/create", authenticateMultiRequired, async (req, res) => {
       );
     }
 
+    // add deeplinks in created response (lightweight summary only has summary fields)
+    const deeplinkMapCreate = await buildDeeplinkMap(orderItems.map((i) => i.productId));
+    const orderItemsWithLinks = withDeeplink(orderItems, deeplinkMapCreate);
+
     res.json({
       success: true,
       message: "Order created successfully",
       data: {
         orderId: order.orderId,
-        orderSummary: order.orderSummary,
+        orderSummary: {
+          ...order.orderSummary,
+          // include first two items with links for convenience
+          itemsPreview: orderItemsWithLinks.slice(0, 2),
+        },
         totalAmount: order.totalAmount,
         estimatedDelivery: order.deliveryDetails.estimatedDelivery,
       },
@@ -188,11 +218,15 @@ router.get("/user", authenticateMultiRequired, async (req, res) => {
 
     // Summarize
     // Return full order objects instead of summaries for frontend compatibility
+    const deeplinkMap = await buildDeeplinkMap(
+      orders.flatMap((o) => (o.items || []).map((i) => i.productId))
+    );
+
     const fullOrders = orders.map((o) => ({
       _id: o._id,
       orderId: o.orderId,
       userId: o.userId,
-      items: o.items || [],
+      items: withDeeplink(o.items || [], deeplinkMap),
       deliveryDetails: o.deliveryDetails || {},
       paymentDetails: o.paymentDetails || {},
       orderStatus: o.orderStatus,
