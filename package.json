@@ -11,6 +11,7 @@
     "seed:reviews": "node test/sample-reviews.js",
     "seed:pincode": "node test/seed-pincode-delivery.js",
     "seed:all": "npm run seed:users && npm run seed && npm run seed:reviews && npm run seed:pincode",
+    "seed:dummy-orders": "node test/seed-dummy-orders.js",
     "users:update-by-password": "node test/update-users-by-password.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

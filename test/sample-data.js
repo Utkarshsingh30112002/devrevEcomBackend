@@ -14,7 +14,7 @@ const sampleProducts = [
     brand: "Logitech",
     imageUrl:
       "https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdXNlfGVufDB8fDB8fHww",
-    stock: 15,
+    stock: 1500,
     category: "mouse",
     specs: {
       dpi: "1600",
@@ -90,7 +90,7 @@ const sampleProducts = [
     brand: "HP",
     imageUrl:
       "https://images.unsplash.com/photo-1639120346883-897e8ea1d4f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aHAlMjBtb3VzZXxlbnwwfHwwfHx8MA%3D%3D",
-    stock: 20,
+    stock: 2000,
     category: "mouse",
     specs: {
       dpi: "1200",
@@ -163,7 +163,7 @@ const sampleProducts = [
     brand: "Razer",
     imageUrl:
       "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
-    stock: 8,
+    stock: 8000,
     category: "mouse",
     specs: {
       dpi: "16000",
@@ -236,7 +236,7 @@ const sampleProducts = [
     brand: "Dell",
     imageUrl:
       "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    stock: 25,
+    stock: 25000,
     category: "mouse",
     specs: {
       dpi: "1000",
@@ -307,7 +307,7 @@ const sampleProducts = [
     brand: "Microsoft",
     imageUrl:
       "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
-    stock: 12,
+    stock: 12000,
     category: "mouse",
     specs: {
       dpi: "1000",
@@ -377,7 +377,7 @@ const sampleProducts = [
     brand: "Logitech",
     imageUrl:
       "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
-    stock: 12,
+    stock: 12000,
     category: "mouse",
     specs: {
       dpi: "100 - 25,600 DPI",
@@ -430,7 +430,7 @@ const sampleProducts = [
     brand: "Corsair",
     imageUrl:
       "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
-    stock: 22,
+    stock: 22000,
     category: "mouse",
     specs: {
       dpi: "100 - 18,000 DPI",
@@ -483,7 +483,7 @@ const sampleProducts = [
     brand: "Dell",
     imageUrl:
       "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bW91c2V8ZW58MHx8MHx8fDA%3D",
-    stock: 65,
+    stock: 65000,
     category: "mouse",
     specs: {
       dpi: "1000 DPI",
@@ -538,7 +538,7 @@ const sampleProducts = [
     brand: "MSI",
     imageUrl:
       "https://images.unsplash.com/photo-1657936412057-67a8bb0a04a8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    stock: 5,
+    stock: 50000,
     category: "laptop",
     specs: {
       ram: "16GB DDR5",
@@ -611,7 +611,7 @@ const sampleProducts = [
     brand: "Acer",
     imageUrl:
       "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bGFwdG9wfGVufDB8fDB8fHww",
-    stock: 7,
+    stock: 70000,
     category: "laptop",
     specs: {
       ram: "8GB LPDDR4X",
@@ -680,7 +680,7 @@ const sampleProducts = [
     brand: "Lenovo",
     imageUrl:
       "https://plus.unsplash.com/premium_photo-1681566925324-ee1e65d9d53e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGFjZXIlMjBsYXB0b3B8ZW58MHx8MHx8fDA%3D",
-    stock: 10,
+    stock: 100000,
     category: "laptop",
     specs: {
       ram: "16GB LPDDR4X (soldered)",
@@ -750,7 +750,7 @@ const sampleProducts = [
     brand: "Dell",
     imageUrl:
       "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bGFwdG9wfGVufDB8fDB8fHww",
-    stock: 6,
+    stock: 60000,
     category: "laptop",
     specs: {
       ram: "12GB DDR4",
@@ -817,7 +817,7 @@ const sampleProducts = [
     brand: "Asus",
     imageUrl:
       "https://plus.unsplash.com/premium_photo-1681336999969-516d993e88cc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGFzdXMlMjBsYXB0b3B8ZW58MHx8MHx8fDA%3D",
-    stock: 4,
+    stock: 40000,
     category: "laptop",
     specs: {
       ram: "16GB DDR4 (expandable to 24GB)",
@@ -889,7 +889,7 @@ const sampleProducts = [
     brand: "Acer",
     imageUrl:
       "https://images.unsplash.com/photo-1555117391-6c0795768da8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    stock: 25,
+    stock: 250000,
     category: "laptop",
     specs: {
       ram: "8GB DDR4 (expandable to 16GB)",
@@ -956,7 +956,7 @@ const sampleProducts = [
     brand: "Lenovo",
     imageUrl:
       "https://images.unsplash.com/photo-1504707748692-419802cf939d?q=80&w=1147&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    stock: 18,
+    stock: 180000,
     category: "laptop",
     specs: {
       ram: "16GB DDR4 (Soldered)",
@@ -1024,7 +1024,7 @@ const sampleProducts = [
     brand: "Asus",
     imageUrl:
       "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    stock: 45,
+    stock: 450000,
     category: "laptop",
     specs: {
       ram: "8GB LPDDR4 (Soldered)",

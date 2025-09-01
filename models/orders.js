@@ -237,8 +237,8 @@ orderSchema.methods.isWithinReturnWindow = function () {
   if (!this.deliveredAt) return false;
   const now = Date.now();
   const delivered = new Date(this.deliveredAt).getTime();
-  const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
-  return now - delivered <= threeDaysMs;
+  const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+  return now - delivered <= thirtyDaysMs;
 };
 
 // Helper to generate a simple request ID
